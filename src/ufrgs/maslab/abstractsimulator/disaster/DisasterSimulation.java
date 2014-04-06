@@ -174,7 +174,7 @@ public class DisasterSimulation<T extends Task, A extends Agent<T>>{
 			agent.act(this.time);
 			
 			//show current time to agent
-			agent.time = this.time;
+			agent.setTime(this.time);
 			
 			//assign agent's new task
 			int taskId = -1;

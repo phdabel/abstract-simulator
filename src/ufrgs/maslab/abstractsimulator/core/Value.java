@@ -1,8 +1,6 @@
 package ufrgs.maslab.abstractsimulator.core;
 
 import java.io.Serializable;
-//import java.util.ArrayList;
-import java.util.ArrayList;
 
 
 public abstract class Value extends Entity implements Serializable, Comparable<Value> {
@@ -12,23 +10,54 @@ public abstract class Value extends Entity implements Serializable, Comparable<V
 	 */
 	private static final long serialVersionUID = 3L;
 	
-	private transient ArrayList<Variable> variables = new ArrayList<Variable>();
-	
+	/**
+	 * <ul>
+	 * <li>double value used to optimization</li>
+	 * </ul>
+	 */
 	private Double value;
 	
-	public ArrayList<Variable> getVariables()
-	{
-		return this.variables;
+	/**
+	 * overrides entity constructor
+	 */
+	public Value(){
+		super();
 	}
-
+	
+	/**
+	 * overrides entity constructor
+	 * @param id
+	 */
+	public Value(Integer id)
+	{
+		super(id);
+	}
+	
+	/**
+	 * <ul>
+	 * <li>returns the numeric value</li>
+	 * </ul>
+	 * @return
+	 */
 	public Double getValue() {
 		return value;
 	}
 
+	/**
+	 * <ul>
+	 * <li>assigns the value</li>
+	 * </ul>
+	 * @param value
+	 */
 	public void setValue(Double value) {
 		this.value = value;
 	}
 	
+	/**
+	 * <ul>
+	 * <li>compare two values</li>
+	 * </ul>
+	 */
 	public int compareTo(Value other)
 	{
 		if(this.value < other.getValue()){
