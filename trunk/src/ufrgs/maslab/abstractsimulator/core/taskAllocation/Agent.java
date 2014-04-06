@@ -13,19 +13,21 @@ public class Agent<T extends Task> extends Variable<T> {
 	
 	private double y;
 	
+	public Agent(){
+		super();
+	}
+	
+	public Agent(Integer id)
+	{
+		super(id);
+	}
+	
 	public Agent(double x, double y){
 		super();
 		this.x = x;
 		this.y = y;
 	}
-	
-	public T getValue() {
-		return this.value;
-	}
 
-	public void assign(T value) {
-		this.value = value;
-	}
 	
 	public double getX(){
 		return this.x;
@@ -42,6 +44,18 @@ public class Agent<T extends Task> extends Variable<T> {
 	
 	public void setX(double x){
 		this.x = x;
+	}
+
+	@Override
+	public void act(int time) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sense(int time) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 

@@ -13,20 +13,15 @@ public class Task extends Value {
 	
 	private int y;
 	
-	
-	/**
-	 *  creates a default burning building
-	 *  with at most 5 floors
-	 */
 	public Task(){
 		super();
 	}
 	
-	public Task(Task t)
+	public Task(Integer id)
 	{
-		super();
+		super(id);
 	}
-
+	
 	public int getX() {
 		return x;
 	}
@@ -60,11 +55,5 @@ public class Task extends Value {
 	public String toString(){
 		return "Task: "+this.getId()+" - Value: "+this.getValue().toString();
 	}
-
 	
-	
-	
-	
-	
-
 }
