@@ -8,7 +8,7 @@ import java.util.Map;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
 import ufrgs.maslab.abstractsimulator.util.WriteFile;
 
-public class Environment<val extends Value, var extends Variable<val>> extends Entity {
+public class Environment<val extends Value, var extends Variable> extends Entity {
 
 	/**
 	 * 
@@ -225,7 +225,7 @@ public class Environment<val extends Value, var extends Variable<val>> extends E
 	public void allocateVariables(int time){
 		this.saveCurrentStep(time);
 		this.getAllocation().clear();
-		for(var agent : this.getVariables())
+		for(Variable agent : this.getVariables())
 		{
 			this.allocateVariable(agent.getValue(), agent.getId());
 		}
@@ -308,8 +308,8 @@ public class Environment<val extends Value, var extends Variable<val>> extends E
 	 * @param idx
 	 * @return
 	 */
-	public val findValueByID(int idx){
-		val v = null;
+	public Value findValueByID(int idx){
+		Value v = null;
 		try {
 			v = this.valClass.getConstructor(Integer.class).newInstance(idx);
 		} catch (InstantiationException e) {
@@ -344,9 +344,9 @@ public class Environment<val extends Value, var extends Variable<val>> extends E
 	 * @param idx
 	 * @return
 	 */
-	public var findVariableByID(int idx){
+	public Variable findVariableByID(int idx){
 		
-		var v = null;
+		Variable v = null;
 		try {
 			v = this.getVarClass().getConstructor(Integer.class).newInstance(idx);
 		} catch (InstantiationException e) {
