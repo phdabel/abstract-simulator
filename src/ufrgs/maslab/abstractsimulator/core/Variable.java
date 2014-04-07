@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public abstract class Variable<V extends Value> extends Entity implements Serializable {
+public abstract class Variable extends Entity implements Serializable {
 
 	/**
 	 * 
@@ -76,7 +76,7 @@ public abstract class Variable<V extends Value> extends Entity implements Serial
 	 * </ul>
 	 * @param value
 	 */
-	public void assign(V value) {
+	public void assign(Value value) {
 		this.value = value.getId();
 		/*
 		 * will be included after

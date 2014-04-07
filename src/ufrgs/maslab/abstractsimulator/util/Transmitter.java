@@ -32,6 +32,25 @@ public class Transmitter {
 	 * @param property
 	 * @return
 	 */
+	public static Double getDoubleConfigParameter(String filename, String property)
+	{
+		try{
+			return new Double(getProp(filename).getProperty(property));
+		}catch(IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * returns the specified property from the specified file
+	 * 
+	 * @param filename
+	 * @param property
+	 * @return
+	 */
 	public static Integer getIntConfigParameter(String filename, String property)
 	{
 		try{

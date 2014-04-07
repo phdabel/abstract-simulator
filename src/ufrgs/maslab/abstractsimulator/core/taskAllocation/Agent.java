@@ -2,7 +2,7 @@ package ufrgs.maslab.abstractsimulator.core.taskAllocation;
 
 import ufrgs.maslab.abstractsimulator.core.Variable;
 
-public class Agent<T extends Task> extends Variable<T> {
+public class Agent extends Variable {
 
 	/**
 	 * 
