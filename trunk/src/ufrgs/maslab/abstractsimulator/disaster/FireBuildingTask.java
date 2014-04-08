@@ -137,7 +137,7 @@ public class FireBuildingTask extends Task {
 				break;
 			
 		}
-		int hp = this.getFloors() * this.getApartmentsPerFloor() * this.groundArea * (10 ^ this.getMatter().getValue());
+		int hp = this.getFloors() * this.getApartmentsPerFloor() + (10 ^ this.getMatter().getValue());
 		this.setBuildingHP(hp);
 		
 	}

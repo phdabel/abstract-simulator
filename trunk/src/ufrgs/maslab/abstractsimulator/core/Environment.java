@@ -8,7 +8,7 @@ import java.util.Map;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
 import ufrgs.maslab.abstractsimulator.util.WriteFile;
 
-public class Environment<val extends Value, var extends Variable> extends Entity {
+public class Environment<val extends Value, Variable> extends Entity {
 
 	/**
 	 * 
@@ -38,7 +38,7 @@ public class Environment<val extends Value, var extends Variable> extends Entity
 	 * </ul>
 	 * 
 	 */
-	private Class<var> varClass = null;
+	private Class<Variable> varClass = null;
 	
 	/**
 	 * <ul>
@@ -46,7 +46,7 @@ public class Environment<val extends Value, var extends Variable> extends Entity
 	 * </ul>
 	 * 
 	 */
-	private ArrayList<var> variableSet = new ArrayList<var>();
+	private ArrayList<Variable> variableSet = new ArrayList<Variable>();
 	
 	/**
 	 * <ul>
@@ -106,10 +106,10 @@ public class Environment<val extends Value, var extends Variable> extends Entity
 	 * @return ArrayList<var extends Variable>
 	 */
 	@SuppressWarnings("unchecked")
-	public ArrayList<var> getVariables(){
+	public ArrayList<Variable> getVariables(){
 		if(this.getVarClass() == null)
 			if(!this.variableSet.isEmpty())
-				this.setVarClass((Class<var>) this.variableSet.get(0).getClass());
+				this.setVarClass((Class<Variable>) this.variableSet.get(0).getClass());
 		return this.variableSet;
 	}
 	
@@ -226,8 +226,8 @@ public class Environment<val extends Value, var extends Variable> extends Entity
 		this.saveCurrentStep(time);
 		this.getAllocation().clear();
 		for(Variable agent : this.getVariables())
-		{
-			this.allocateVariable(agent.getValue(), agent.getId());
+		{			
+			//this.allocateVariable( ((Variable)agent).getValue(), ((Variable)agent).getId() );
 		}
 	}
 	
@@ -344,9 +344,9 @@ public class Environment<val extends Value, var extends Variable> extends Entity
 	 * @param idx
 	 * @return
 	 */
-	public var findVariableByID(int idx){
+	public Variable findVariableByID(int idx){
 		
-		var v = null;
+		Variable v = null;
 		try {
 			v = this.getVarClass().getConstructor(Integer.class).newInstance(idx);
 		} catch (InstantiationException e) {
@@ -384,11 +384,11 @@ public class Environment<val extends Value, var extends Variable> extends Entity
 		this.valClass = valClass;
 	}
 
-	protected Class<var> getVarClass() {
+	protected Class<Variable> getVarClass() {
 		return varClass;
 	}
 
-	protected void setVarClass(Class<var> varClass) {
+	protected void setVarClass(Class<Variable> varClass) {
 		this.varClass = varClass;
 	}
 

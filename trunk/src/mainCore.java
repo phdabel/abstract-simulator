@@ -2,6 +2,7 @@ import ufrgs.maslab.abstractsimulator.core.BlackBox;
 import ufrgs.maslab.abstractsimulator.core.taskAllocation.Agent;
 import ufrgs.maslab.abstractsimulator.core.taskAllocation.Human;
 import ufrgs.maslab.abstractsimulator.core.taskAllocation.Task;
+import ufrgs.maslab.abstractsimulator.disaster.FireFighter;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
 
 
@@ -10,7 +11,20 @@ public class mainCore {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		BlackBox<Task, Human> core = new BlackBox<Task,Human>(Human.class, Task.class);
+		//BlackBox<Task, Human> core = new BlackBox<Task,Human>(Human.class, Task.class);
+		
+		BlackBox<Task, Human> core = new BlackBox<Task,Human>();
+		core.newEnvironment();
+		
+		try {
+			core.addAgent(FireFighter.class);
+		} catch (InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		for(Human h : core.getEnvironment().getVariables())
 		{
@@ -30,10 +44,6 @@ public class mainCore {
 			System.out.println("will "+h.getWill());
 			System.out.println();
 		}
-		System.out.println("core task x "+core.getEnvironment().findValueByID(103).getClass());
-		System.out.println("core agent y "+core.getEnvironment().findVariableByID(3).getClass());
-		System.out.println("human priority "+core.getEnvironment().findVariableByID(3).getPriority().toString());
-		System.out.println(core.getSimulation());
 		
 		try {
 			core.simulationStart();

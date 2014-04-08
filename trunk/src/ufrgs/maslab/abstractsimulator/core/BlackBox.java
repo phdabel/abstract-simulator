@@ -2,11 +2,12 @@ package ufrgs.maslab.abstractsimulator.core;
 
 import java.util.ArrayList;
 
+import ufrgs.maslab.abstractsimulator.core.simulators.DefaultSimulation;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
 import ufrgs.maslab.abstractsimulator.util.WriteFile;
 
-public class BlackBox<Val extends Value ,Var extends Variable> {
+public class BlackBox<Val extends Value ,Variable> {
 	
 	/**
 	 *  <ul>
@@ -17,11 +18,13 @@ public class BlackBox<Val extends Value ,Var extends Variable> {
 	 */
 	private String configFileName = "config.properties";
 	
+	private String messageFileName = "message.properties";
+	
 	private String exceptionFileName = "exception.properties";
 	/**
 	 * environment variable
 	 */
-	private Environment<Val, Var> env;
+	private Environment<Val, Variable> env;
 	
 	/**
 	 *  list of simulations
@@ -53,7 +56,7 @@ public class BlackBox<Val extends Value ,Var extends Variable> {
 	 * @param values
 	 * @param variables
 	 */
-	public BlackBox(Class<Var> var, Class<Val> val)
+	public BlackBox(Class<Variable> var, Class<Val> val)
 	{
 		try {
 			this.configure(var, val);
@@ -63,7 +66,29 @@ public class BlackBox<Val extends Value ,Var extends Variable> {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * specific constructor
+	 */
+	public BlackBox()
+	{
 		
+	}
+	
+	/**
+	 * new environment
+	 */
+	public void newEnvironment(){
+		if(this.env == null){
+			this.env = new Environment<Val, Variable>();
+		}else
+			Transmitter.message(this.messageFileName, "message.environment");
+	}
+	
+	public void addAgent(Class<Variable> agentClass) throws InstantiationException, IllegalAccessException{
+		Variable ag = agentClass.newInstance();
+		this.env.getVariables().add(ag);
+	}
 
 	/**
 	 * private function to create new variables and values to the simulation
@@ -73,12 +98,12 @@ public class BlackBox<Val extends Value ,Var extends Variable> {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	private void configure(Class<Var> var, Class<Val> val) throws InstantiationException, IllegalAccessException{
+	private void configure(Class<Variable> var, Class<Val> val) throws InstantiationException, IllegalAccessException{
 		
-		this.env = new Environment<Val, Var>();
+		this.newEnvironment();
 		for(int x = 0; x < this.initialAgents; x++)
 		{
-			Var ag = var.newInstance();
+			Variable ag = var.newInstance();
 			this.env.getVariables().add(ag);
 		}
 		
@@ -131,7 +156,7 @@ public class BlackBox<Val extends Value ,Var extends Variable> {
 	 * return the environment
 	 * @return
 	 */
-	public Environment<Val, Var> getEnvironment() {
+	public Environment<Val, Variable> getEnvironment() {
 		return env;
 	}
 
