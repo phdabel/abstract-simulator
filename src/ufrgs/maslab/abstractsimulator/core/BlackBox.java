@@ -2,12 +2,11 @@ package ufrgs.maslab.abstractsimulator.core;
 
 import java.util.ArrayList;
 
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Agent;
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Task;
-import ufrgs.maslab.abstractsimulator.disaster.DisasterEnvironment;
+import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
+import ufrgs.maslab.abstractsimulator.util.WriteFile;
 
-public class BlackBox<Env extends Environment<Val, Var>, Val extends Value, Var extends Variable> {
+public class BlackBox<Val extends Value ,Var extends Variable> {
 	
 	/**
 	 *  <ul>
@@ -18,10 +17,11 @@ public class BlackBox<Env extends Environment<Val, Var>, Val extends Value, Var 
 	 */
 	private String configFileName = "config.properties";
 	
+	private String exceptionFileName = "exception.properties";
 	/**
 	 * environment variable
 	 */
-	private Env env;
+	private Environment<Val, Var> env;
 	
 	/**
 	 *  list of simulations
@@ -43,16 +43,20 @@ public class BlackBox<Env extends Environment<Val, Var>, Val extends Value, Var 
 	 */
 	private int timesteps = Transmitter.getIntConfigParameter(this.configFileName, "config.timesteps");
 	
+	/**
+	 * current time
+	 */
+	private int time = 0; 
 	
 	/**
 	 * constructor of the simulator without clusters of values
 	 * @param values
 	 * @param variables
 	 */
-	public BlackBox(Class<Env> env, Class<Var> var, Class<Val> val)
+	public BlackBox(Class<Var> var, Class<Val> val)
 	{
 		try {
-			this.configure(env, var, val);
+			this.configure(var, val);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -69,10 +73,9 @@ public class BlackBox<Env extends Environment<Val, Var>, Val extends Value, Var 
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	private void configure(Class<Env> env, Class<Var> var, Class<Val> val) throws InstantiationException, IllegalAccessException{
+	private void configure(Class<Var> var, Class<Val> val) throws InstantiationException, IllegalAccessException{
 		
-		this.env = env.newInstance();
-		
+		this.env = new Environment<Val, Var>();
 		for(int x = 0; x < this.initialAgents; x++)
 		{
 			Var ag = var.newInstance();
@@ -84,6 +87,28 @@ public class BlackBox<Env extends Environment<Val, Var>, Val extends Value, Var 
 			this.env.getValues().add(val.newInstance());
 		}		
 	
+	}
+	
+	/**
+	 * starts the simulation until the total timesteps
+	 * 
+	 * @throws SimulatorException
+	 */
+	public void simulationStart() throws SimulatorException{
+		if(this.getSimulation().isEmpty())
+			throw new SimulatorException(Transmitter.getProperty(this.exceptionFileName, "exception.no.simulator"));
+		while(this.time <= this.timesteps)
+			this.simulationStep();
+
+		WriteFile.getInstance().closeFile();
+		Transmitter.message(this.configFileName, "final.message");
+	}
+	
+	/**
+	 * perform one simulation step
+	 */
+	private void simulationStep(){
+		
 	}
 
 	/**
@@ -106,7 +131,7 @@ public class BlackBox<Env extends Environment<Val, Var>, Val extends Value, Var 
 	 * return the environment
 	 * @return
 	 */
-	public Env getEnvironment() {
+	public Environment<Val, Var> getEnvironment() {
 		return env;
 	}
 

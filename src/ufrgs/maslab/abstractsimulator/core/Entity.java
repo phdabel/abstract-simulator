@@ -97,6 +97,7 @@ public abstract class Entity implements Serializable {
 		return this.dices.nextInt(maxValue);
 	}
 	
+	
 	/**
 	 * <ul>
 	 * <li>returns the hashCode of the entity</li>

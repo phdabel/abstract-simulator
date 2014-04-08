@@ -1,5 +1,7 @@
 package ufrgs.maslab.abstractsimulator.core.taskAllocation;
 
+import java.util.ArrayList;
+
 import ufrgs.maslab.abstractsimulator.core.Value;
 
 public class Task extends Value {
@@ -8,6 +10,8 @@ public class Task extends Value {
 	 * 
 	 */
 	private static final long serialVersionUID = 4L;
+	
+	private ArrayList<Human> performer = new ArrayList<Human>();
 	
 	private int x;
 	
@@ -54,6 +58,14 @@ public class Task extends Value {
 	
 	public String toString(){
 		return "Task: "+this.getId()+" - Value: "+this.getValue().toString();
+	}
+
+	public ArrayList<Human> getPerformer() {
+		return performer;
+	}
+
+	public void setPerformer(ArrayList<Human> performer) {
+		this.performer = performer;
 	}
 	
 }

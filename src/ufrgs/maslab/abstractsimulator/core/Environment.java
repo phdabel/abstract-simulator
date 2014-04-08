@@ -308,8 +308,8 @@ public class Environment<val extends Value, var extends Variable> extends Entity
 	 * @param idx
 	 * @return
 	 */
-	public Value findValueByID(int idx){
-		Value v = null;
+	public val findValueByID(int idx){
+		val v = null;
 		try {
 			v = this.valClass.getConstructor(Integer.class).newInstance(idx);
 		} catch (InstantiationException e) {
@@ -344,9 +344,9 @@ public class Environment<val extends Value, var extends Variable> extends Entity
 	 * @param idx
 	 * @return
 	 */
-	public Variable findVariableByID(int idx){
+	public var findVariableByID(int idx){
 		
-		Variable v = null;
+		var v = null;
 		try {
 			v = this.getVarClass().getConstructor(Integer.class).newInstance(idx);
 		} catch (InstantiationException e) {
