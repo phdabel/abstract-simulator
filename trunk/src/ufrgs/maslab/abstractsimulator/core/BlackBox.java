@@ -1,11 +1,9 @@
 package ufrgs.maslab.abstractsimulator.core;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
-import ufrgs.maslab.abstractsimulator.core.simulators.AbstractSimulation;
 import ufrgs.maslab.abstractsimulator.core.simulators.DefaultSimulation;
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Agent;
+
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
 import ufrgs.maslab.abstractsimulator.util.WriteFile;
@@ -32,7 +30,7 @@ public class BlackBox {
 	/**
 	 *  list of simulations
 	 */
-	private ArrayList<AbstractSimulation> simulation = new ArrayList<AbstractSimulation>();
+	private ArrayList<DefaultSimulation> simulation = new ArrayList<DefaultSimulation>();
 
 	/**
 	 *  initial variables (agents)
@@ -88,11 +86,11 @@ public class BlackBox {
 		}else
 			Transmitter.message(this.messageFileName, "message.environment");
 	}
-	/*
+	
 	public void addAgent(Class<? extends Variable> agentClass) throws InstantiationException, IllegalAccessException{
-		Agent var = (Agent) agentClass.newInstance();
+		Variable var = agentClass.newInstance();
 		this.env.getVariables().add(var);
-	}*/
+	}
 
 	/**
 	 * private function to create new variables and values to the simulation
@@ -147,7 +145,7 @@ public class BlackBox {
 	 * return list of simulators
 	 * @return
 	 */
-	public ArrayList<AbstractSimulation> getSimulation() {
+	public ArrayList<DefaultSimulation> getSimulation() {
 		return simulation;
 	}
 
@@ -155,7 +153,7 @@ public class BlackBox {
 	 * add simulation to the list
 	 * @param simulation
 	 */
-	public void addSimulation(Class<? extends AbstractSimulation> simulation) {
+	public void addSimulation(Class<? extends DefaultSimulation> simulation) {
 		try {
 			this.getSimulation().add(simulation.newInstance());
 		} catch (InstantiationException e) {

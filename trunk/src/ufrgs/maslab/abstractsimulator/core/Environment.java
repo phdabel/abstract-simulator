@@ -2,11 +2,8 @@ package ufrgs.maslab.abstractsimulator.core;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import ufrgs.maslab.abstractsimulator.core.taskAllocation.Agent;
@@ -51,14 +48,14 @@ public class Environment<E extends Entity> extends Entity {
 	 * </ul>
 	 * 
 	 */
-	private Collection<? extends Variable> variableSet = new ArrayList<>();
+	private ArrayList<Variable> variableSet = new ArrayList<Variable>();
 	
 	/**
 	 * <ul>
 	 * <li>Set of values of the environment</li>
 	 * </ul>
 	 */
-	private Collection<? extends Value> valueSet = new ArrayList<>();
+	private ArrayList<Value> valueSet = new ArrayList<Value>();
 	
 	/**
 	 *  <ul>
@@ -110,12 +107,12 @@ public class Environment<E extends Entity> extends Entity {
 	 * 
 	 * @return ArrayList<var extends Variable>
 	 */
-	public List<?> getVariables(){
+	public ArrayList<Variable> getVariables(){
 		
 		if(this.getVarClass() == null)
 			if(!this.variableSet.isEmpty())
 				this.setVarClass(this.variableSet.iterator().next().getClass());
-		return Arrays.asList(this.variableSet.iterator());
+		return this.variableSet;
 	}
 	
 	/**
@@ -125,11 +122,11 @@ public class Environment<E extends Entity> extends Entity {
 	 * 
 	 * @return ArrayList<val extends Value>
 	 */
-	public List<?> getValues(){
+	public ArrayList<Value> getValues(){
 		if(this.getValClass() == null)
 			if(!this.valueSet.isEmpty())
 				this.setValClass(this.valueSet.iterator().next().getClass());
-		return Arrays.asList(this.valueSet.iterator());
+		return this.valueSet;
 	}
 	
 	/**
@@ -336,10 +333,10 @@ public class Environment<E extends Entity> extends Entity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		int idxVal = this.getValues().indexOf(v); 
+		int idxVal = this.getValues().indexOf(v);
 		v = null;
-		return (Value)this.getValues().get(idxVal);
+		return this.getValues().get(idxVal);		
+		
 	}
 	
 	/**
@@ -376,7 +373,7 @@ public class Environment<E extends Entity> extends Entity {
 		
 		int idxVar = this.getVariables().indexOf(v);
 		v = null;
-		return (Variable)this.getVariables().get(idxVar);
+		return this.getVariables().get(idxVar);
 	}
 	
 	

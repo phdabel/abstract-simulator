@@ -1,12 +1,9 @@
 package ufrgs.maslab.abstractsimulator.core.simulators;
 
-public class DefaultSimulation extends AbstractSimulation {
+public abstract class DefaultSimulation {
 
-	@Override
-	public void simulate() {
-		// TODO Auto-generated method stub
-		
-	}	
+	
+	public abstract void simulate();
 	
 	
 	
