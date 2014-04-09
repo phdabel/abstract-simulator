@@ -1,10 +1,12 @@
 package ufrgs.maslab.abstractsimulator.core.taskAllocation;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
+import ufrgs.maslab.abstractsimulator.core.Entity;
 import ufrgs.maslab.abstractsimulator.core.Value;
 
-public class Task extends Value {
+public class Task extends Entity implements Value, Serializable, Comparable<Task> {
 
 	/**
 	 * 
@@ -16,6 +18,13 @@ public class Task extends Value {
 	private int x;
 	
 	private int y;
+	
+	/**
+	 * <ul>
+	 * <li>double value used to optimization</li>
+	 * </ul>
+	 */
+	private Double value;
 	
 	public Task(){
 		super();
@@ -41,20 +50,6 @@ public class Task extends Value {
 	public void setY(int y) {
 		this.y = y;
 	}
-
-	public int compareTo(Task other) {
-	
-		Task t = (Task)other;
-		if(this.getValue() < t.getValue())
-		{
-			return -1;
-		}
-		if(this.getValue() > t.getValue())
-		{
-			return 1;
-		}
-		return 0;
-	}
 	
 	public String toString(){
 		return "Task: "+this.getId()+" - Value: "+this.getValue().toString();
@@ -67,5 +62,41 @@ public class Task extends Value {
 	public void setPerformer(ArrayList<Human> performer) {
 		this.performer = performer;
 	}
+
+	/**
+	 * <ul>
+	 * <li>returns the numeric value</li>
+	 * </ul>
+	 * @return
+	 */
+	public Double getValue() {
+		return value;
+	}
+
+	/**
+	 * <ul>
+	 * <li>assigns the value</li>
+	 * </ul>
+	 * @param value
+	 */
+	public void setValue(Double value) {
+		this.value = value;
+	}
 	
+	/**
+	 * <ul>
+	 * <li>compare two values</li>
+	 * </ul>
+	 */
+	public int compareTo(Task other)
+	{
+		if(this.value < other.getValue()){
+			return -1;
+		}
+		if(this.value > other.getValue())
+		{
+			return 1;
+		}
+		return 0;
+	}	
 }
