@@ -13,11 +13,12 @@ public class mainCore {
 
 		//BlackBox<Task, Human> core = new BlackBox<Task,Human>(Human.class, Task.class);
 		
-		BlackBox<Task, Human> core = new BlackBox<Task,Human>();
+		BlackBox core = new BlackBox();
 		core.newEnvironment();
 		
 		try {
-			core.addAgent(FireFighter.class);
+			
+			//core.addAgent(FireFighter.class);
 		} catch (InstantiationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

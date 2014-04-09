@@ -341,6 +341,18 @@ public class Human extends Agent {
 		return priority;
 	}
 
+	@Override
+	public void act(int time) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sense(int time) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 	
 

@@ -2,13 +2,18 @@ package ufrgs.maslab.abstractsimulator.core;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import ufrgs.maslab.abstractsimulator.core.taskAllocation.Agent;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
 import ufrgs.maslab.abstractsimulator.util.WriteFile;
 
-public class Environment<val extends Value, Variable> extends Entity {
+public class Environment<E extends Entity> extends Entity {
 
 	/**
 	 * 
@@ -30,7 +35,7 @@ public class Environment<val extends Value, Variable> extends Entity {
 	 * </ul>
 	 * 
 	 */
-	private Class<val> valClass = null;
+	private Class<? extends Value> valClass = null;
 	
 	/**
 	 * <ul>
@@ -38,7 +43,7 @@ public class Environment<val extends Value, Variable> extends Entity {
 	 * </ul>
 	 * 
 	 */
-	private Class<Variable> varClass = null;
+	private Class<? extends Variable> varClass = null;
 	
 	/**
 	 * <ul>
@@ -46,14 +51,14 @@ public class Environment<val extends Value, Variable> extends Entity {
 	 * </ul>
 	 * 
 	 */
-	private ArrayList<Variable> variableSet = new ArrayList<Variable>();
+	private Collection<? extends Variable> variableSet = new ArrayList<>();
 	
 	/**
 	 * <ul>
 	 * <li>Set of values of the environment</li>
 	 * </ul>
 	 */
-	private ArrayList<val> valueSet = new ArrayList<val>();
+	private Collection<? extends Value> valueSet = new ArrayList<>();
 	
 	/**
 	 *  <ul>
@@ -105,12 +110,12 @@ public class Environment<val extends Value, Variable> extends Entity {
 	 * 
 	 * @return ArrayList<var extends Variable>
 	 */
-	@SuppressWarnings("unchecked")
-	public ArrayList<Variable> getVariables(){
+	public List<?> getVariables(){
+		
 		if(this.getVarClass() == null)
 			if(!this.variableSet.isEmpty())
-				this.setVarClass((Class<Variable>) this.variableSet.get(0).getClass());
-		return this.variableSet;
+				this.setVarClass(this.variableSet.iterator().next().getClass());
+		return Arrays.asList(this.variableSet.iterator());
 	}
 	
 	/**
@@ -120,12 +125,11 @@ public class Environment<val extends Value, Variable> extends Entity {
 	 * 
 	 * @return ArrayList<val extends Value>
 	 */
-	@SuppressWarnings("unchecked")
-	public ArrayList<val> getValues(){
+	public List<?> getValues(){
 		if(this.getValClass() == null)
 			if(!this.valueSet.isEmpty())
-				this.setValClass((Class<val>) this.valueSet.get(0).getClass());
-		return this.valueSet;
+				this.setValClass(this.valueSet.iterator().next().getClass());
+		return Arrays.asList(this.valueSet.iterator());
 	}
 	
 	/**
@@ -225,9 +229,10 @@ public class Environment<val extends Value, Variable> extends Entity {
 	public void allocateVariables(int time){
 		this.saveCurrentStep(time);
 		this.getAllocation().clear();
-		for(Variable agent : this.getVariables())
-		{			
-			//this.allocateVariable( ((Variable)agent).getValue(), ((Variable)agent).getId() );
+		Iterator<?> var = this.getVariables().iterator();
+		while(var.hasNext())
+		{
+			this.allocateVariable(((Agent)var).getValue(), ((Agent)var).getId());
 		}
 	}
 	
@@ -308,8 +313,8 @@ public class Environment<val extends Value, Variable> extends Entity {
 	 * @param idx
 	 * @return
 	 */
-	public val findValueByID(int idx){
-		val v = null;
+	public Value findValueByID(int idx){
+		Value v = null;
 		try {
 			v = this.valClass.getConstructor(Integer.class).newInstance(idx);
 		} catch (InstantiationException e) {
@@ -332,9 +337,9 @@ public class Environment<val extends Value, Variable> extends Entity {
 			e.printStackTrace();
 		}
 		
-		int idxVal = this.getValues().indexOf(v);
+		int idxVal = this.getValues().indexOf(v); 
 		v = null;
-		return this.getValues().get(idxVal);
+		return (Value)this.getValues().get(idxVal);
 	}
 	
 	/**
@@ -371,24 +376,24 @@ public class Environment<val extends Value, Variable> extends Entity {
 		
 		int idxVar = this.getVariables().indexOf(v);
 		v = null;
-		return this.getVariables().get(idxVar);
+		return (Variable)this.getVariables().get(idxVar);
 	}
 	
 	
 	
-	protected Class<val> getValClass() {
+	protected Class<? extends Value> getValClass() {
 		return valClass;
 	}
 
-	protected void setValClass(Class<val> valClass) {
+	protected void setValClass(Class<? extends Value> valClass) {
 		this.valClass = valClass;
 	}
 
-	protected Class<Variable> getVarClass() {
+	protected Class<? extends Variable> getVarClass() {
 		return varClass;
 	}
 
-	protected void setVarClass(Class<Variable> varClass) {
+	protected void setVarClass(Class<? extends Variable> varClass) {
 		this.varClass = varClass;
 	}
 

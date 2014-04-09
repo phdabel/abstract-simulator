@@ -1,13 +1,16 @@
 package ufrgs.maslab.abstractsimulator.core;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
+import ufrgs.maslab.abstractsimulator.core.simulators.AbstractSimulation;
 import ufrgs.maslab.abstractsimulator.core.simulators.DefaultSimulation;
+import ufrgs.maslab.abstractsimulator.core.taskAllocation.Agent;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
 import ufrgs.maslab.abstractsimulator.util.WriteFile;
 
-public class BlackBox<Val extends Value ,Variable> {
+public class BlackBox {
 	
 	/**
 	 *  <ul>
@@ -24,12 +27,12 @@ public class BlackBox<Val extends Value ,Variable> {
 	/**
 	 * environment variable
 	 */
-	private Environment<Val, Variable> env;
+	private Environment<? extends Entity> env;
 	
 	/**
 	 *  list of simulations
 	 */
-	private ArrayList<DefaultSimulation> simulation = new ArrayList<DefaultSimulation>();
+	private ArrayList<AbstractSimulation> simulation = new ArrayList<AbstractSimulation>();
 
 	/**
 	 *  initial variables (agents)
@@ -56,7 +59,8 @@ public class BlackBox<Val extends Value ,Variable> {
 	 * @param values
 	 * @param variables
 	 */
-	public BlackBox(Class<Variable> var, Class<Val> val)
+	/*
+	public BlackBox(Class<? extends Variable> var, Class<? extends Value> val)
 	{
 		try {
 			this.configure(var, val);
@@ -65,7 +69,7 @@ public class BlackBox<Val extends Value ,Variable> {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 	/**
 	 * specific constructor
@@ -80,15 +84,15 @@ public class BlackBox<Val extends Value ,Variable> {
 	 */
 	public void newEnvironment(){
 		if(this.env == null){
-			this.env = new Environment<Val, Variable>();
+			this.env = new Environment<Entity>();
 		}else
 			Transmitter.message(this.messageFileName, "message.environment");
 	}
-	
-	public void addAgent(Class<Variable> agentClass) throws InstantiationException, IllegalAccessException{
-		Variable ag = agentClass.newInstance();
-		this.env.getVariables().add(ag);
-	}
+	/*
+	public void addAgent(Class<? extends Variable> agentClass) throws InstantiationException, IllegalAccessException{
+		Agent var = (Agent) agentClass.newInstance();
+		this.env.getVariables().add(var);
+	}*/
 
 	/**
 	 * private function to create new variables and values to the simulation
@@ -98,13 +102,16 @@ public class BlackBox<Val extends Value ,Variable> {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	private void configure(Class<Variable> var, Class<Val> val) throws InstantiationException, IllegalAccessException{
+	/*
+	private void configure(Class<? extends Variable> var, Class<? extends Value> val) throws InstantiationException, IllegalAccessException{
 		
 		this.newEnvironment();
 		for(int x = 0; x < this.initialAgents; x++)
 		{
-			Variable ag = var.newInstance();
-			this.env.getVariables().add(ag);
+			
+			ArrayList<Variable> arrVar = new ArrayList<Variable>();
+			arrVar.add(var.newInstance());
+			this.env.getVariables().add(arrVar.get(0));
 		}
 		
 		for(int y = 0; y < this.initialTasks; y++)
@@ -112,7 +119,7 @@ public class BlackBox<Val extends Value ,Variable> {
 			this.env.getValues().add(val.newInstance());
 		}		
 	
-	}
+	}*/
 	
 	/**
 	 * starts the simulation until the total timesteps
@@ -140,7 +147,7 @@ public class BlackBox<Val extends Value ,Variable> {
 	 * return list of simulators
 	 * @return
 	 */
-	public ArrayList<DefaultSimulation> getSimulation() {
+	public ArrayList<AbstractSimulation> getSimulation() {
 		return simulation;
 	}
 
@@ -148,15 +155,23 @@ public class BlackBox<Val extends Value ,Variable> {
 	 * add simulation to the list
 	 * @param simulation
 	 */
-	public void addSimulation(DefaultSimulation simulation) {
-		this.getSimulation().add(simulation);
+	public void addSimulation(Class<? extends AbstractSimulation> simulation) {
+		try {
+			this.getSimulation().add(simulation.newInstance());
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
 	 * return the environment
 	 * @return
 	 */
-	public Environment<Val, Variable> getEnvironment() {
+	public Environment<? extends Entity> getEnvironment() {
 		return env;
 	}
 
