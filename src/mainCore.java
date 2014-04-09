@@ -1,7 +1,6 @@
 import ufrgs.maslab.abstractsimulator.core.BlackBox;
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Agent;
+import ufrgs.maslab.abstractsimulator.core.Variable;
 import ufrgs.maslab.abstractsimulator.core.taskAllocation.Human;
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Task;
 import ufrgs.maslab.abstractsimulator.disaster.FireFighter;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
 
@@ -17,8 +16,7 @@ public class mainCore {
 		core.newEnvironment();
 		
 		try {
-			
-			//core.addAgent(FireFighter.class);
+			core.addAgent(FireFighter.class);
 		} catch (InstantiationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -27,8 +25,11 @@ public class mainCore {
 			e1.printStackTrace();
 		}
 		
-		for(Human h : core.getEnvironment().getVariables())
+		for(Variable var : core.getEnvironment().getVariables())
 		{
+			System.out.println(var.getClass());
+			
+			Human h = (Human)var;
 			System.out.println("Attributes of Human "+h.getId());
 			System.out.println("Strength "+h.getStrength());
 			System.out.println("Dexterity "+h.getDexterity());
