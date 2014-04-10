@@ -7,8 +7,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 import ufrgs.maslab.abstractsimulator.core.taskAllocation.Agent;
+import ufrgs.maslab.abstractsimulator.log.EnvironmentLogger;
+import ufrgs.maslab.abstractsimulator.log.FireBuildingTaskLogger;
+import ufrgs.maslab.abstractsimulator.log.HumanLogger;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
-import ufrgs.maslab.abstractsimulator.util.WriteFile;
 
 public class Environment<E extends Entity> extends Entity {
 
@@ -17,13 +19,6 @@ public class Environment<E extends Entity> extends Entity {
 	 */
 	private static final long serialVersionUID = 8L;
 	
-	/**
-	 * <ul>
-	 * <li>environment log filename</li>
-	 * </ul>
-	 * 
-	 */
-	private String logFile = null;
 	
 	/**
 	 * 
@@ -32,7 +27,7 @@ public class Environment<E extends Entity> extends Entity {
 	 * </ul>
 	 * 
 	 */
-	private Class<? extends Value> valClass = null;
+	private Map<Class<Value>,Integer> valClass = new HashMap<Class<Value>, Integer>();
 	
 	/**
 	 * <ul>
@@ -40,7 +35,7 @@ public class Environment<E extends Entity> extends Entity {
 	 * </ul>
 	 * 
 	 */
-	private Class<? extends Variable> varClass = null;
+	private HashMap<Class<Variable>, Integer> varClass = new HashMap<Class<Variable>,Integer>();
 	
 	/**
 	 * <ul>
@@ -86,7 +81,9 @@ public class Environment<E extends Entity> extends Entity {
 	public Environment()
 	{
 		super();
-		this.saveHeader();
+		EnvironmentLogger.saveHeader();
+		HumanLogger.saveHeader();
+		FireBuildingTaskLogger.saveHeader();
 		
 	}
 	
@@ -97,7 +94,9 @@ public class Environment<E extends Entity> extends Entity {
 	public Environment(Integer id)
 	{
 		super(id);
-		this.saveHeader();
+		EnvironmentLogger.saveHeader();
+		HumanLogger.saveHeader();
+		FireBuildingTaskLogger.saveHeader();
 	}
 	
 	/**
@@ -109,9 +108,9 @@ public class Environment<E extends Entity> extends Entity {
 	 */
 	public ArrayList<Variable> getVariables(){
 		
-		if(this.getVarClass() == null)
+		/*if(this.getVarClass() == null)
 			if(!this.variableSet.isEmpty())
-				this.setVarClass(this.variableSet.iterator().next().getClass());
+				this.setVarClass(this.variableSet.iterator().next().getClass());*/
 		return this.variableSet;
 	}
 	
@@ -123,9 +122,9 @@ public class Environment<E extends Entity> extends Entity {
 	 * @return ArrayList<val extends Value>
 	 */
 	public ArrayList<Value> getValues(){
-		if(this.getValClass() == null)
+		/*if(this.getValClass() == null)
 			if(!this.valueSet.isEmpty())
-				this.setValClass(this.valueSet.iterator().next().getClass());
+				this.setValClass(this.valueSet.iterator().next().getClass());*/
 		return this.valueSet;
 	}
 	
@@ -175,44 +174,6 @@ public class Environment<E extends Entity> extends Entity {
 		this.allocationSet = allocation;
 	}
 	
-	/**
-	 * creates header for environment log file
-	 */
-	public void saveHeader()
-	{
-		this.logFile = Transmitter.getProperty("files.properties", "environment");
-		WriteFile.getInstance().openFile(this.logFile);
-		String header = "time;task_id;agents_id";
-		WriteFile.getInstance().write(header,this.logFile);
-	}
-	
-	/**
-	 * saves the current step of the environment in the log file
-	 * @param time
-	 */
-	public void saveCurrentStep(Integer time)
-	{
-		WriteFile.getInstance().openFile(this.logFile);
-		String step = null;
-		if(!this.getAllocation().isEmpty()){
-			for(Integer val : this.getAllocation().keySet())
-			{
-				step = time.toString()+";";
-				step += val.toString()+";";
-				for(Integer var : this.getAllocation().get(val))
-				{
-					step += var.toString()+";";
-				}
-				step += "total;"+this.getAllocation().get(val).size()+";";
-				WriteFile.getInstance().write(step, this.logFile);
-				WriteFile.getInstance().nLine(this.logFile);
-			}
-		}else{
-			step = time.toString()+";";
-			WriteFile.getInstance().write(step, this.logFile);
-			WriteFile.getInstance().nLine(this.logFile);
-		}
-	}
 	
 	/**
 	 * <ul>
@@ -224,7 +185,7 @@ public class Environment<E extends Entity> extends Entity {
 	 * @param time
 	 */
 	public void allocateVariables(int time){
-		this.saveCurrentStep(time);
+		EnvironmentLogger.saveCurrentStep(time, this.getAllocation());
 		this.getAllocation().clear();
 		Iterator<?> var = this.getVariables().iterator();
 		while(var.hasNext())
@@ -310,10 +271,12 @@ public class Environment<E extends Entity> extends Entity {
 	 * @param idx
 	 * @return
 	 */
-	public Value findValueByID(int idx){
+	public Value findValueByID(int idx, Class<? extends Value> clazz){
 		Value v = null;
+		
 		try {
-			v = this.valClass.getConstructor(Integer.class).newInstance(idx);
+			v = clazz.getConstructor(Integer.class).newInstance(idx);
+			//v = this.valClass.getConstructor(Integer.class).newInstance(idx);
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -346,11 +309,12 @@ public class Environment<E extends Entity> extends Entity {
 	 * @param idx
 	 * @return
 	 */
-	public Variable findVariableByID(int idx){
+	public Variable findVariableByID(int idx, Class<? extends Variable> clazz){
 		
 		Variable v = null;
 		try {
-			v = this.getVarClass().getConstructor(Integer.class).newInstance(idx);
+			v = clazz.getConstructor(Integer.class).newInstance(idx);
+			//v = this.getVarClass().getConstructor(Integer.class).newInstance(idx);
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -375,9 +339,43 @@ public class Environment<E extends Entity> extends Entity {
 		v = null;
 		return this.getVariables().get(idxVar);
 	}
+
+	public Map<Class<Value>,Integer> getValClass() {
+		return valClass;
+	}
+
+	/**
+	 * <ul>
+	 * <li>function used to register value (tasks) components to the environment</li>
+	 * </ul>
+	 * 
+	 * @param valClass Class of the value component
+	 * @param ammount Ammount of the value component
+	 */
+	@SuppressWarnings("unchecked")
+	public void registerValue(Class<? extends Value> valClass, Integer ammount) {
+		this.valClass.put((Class<Value>)valClass, ammount);
+	}
+
+	public HashMap<Class<Variable>,Integer> getVarClass() {
+		return varClass;
+	}
+
+	/**
+	 * 
+	 * <ul>
+	 * <li>function used to register variables (agents) components to the environment</li>
+	 * </ul>
+	 * @param varClass Class of the variable component
+	 * @param ammount Ammount of the variable component
+	 */
+	@SuppressWarnings("unchecked")
+	public void registerVariable(Class<? extends Variable> varClass, Integer ammount) {
+		this.varClass.put((Class<Variable>)varClass, ammount);
+	}
 	
 	
-	
+	/*
 	protected Class<? extends Value> getValClass() {
 		return valClass;
 	}
@@ -392,7 +390,7 @@ public class Environment<E extends Entity> extends Entity {
 
 	protected void setVarClass(Class<? extends Variable> varClass) {
 		this.varClass = varClass;
-	}
+	}*/
 
 
 }

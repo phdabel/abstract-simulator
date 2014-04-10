@@ -1,6 +1,8 @@
 import ufrgs.maslab.abstractsimulator.core.BlackBox;
 import ufrgs.maslab.abstractsimulator.core.Variable;
+import ufrgs.maslab.abstractsimulator.core.Value;
 import ufrgs.maslab.abstractsimulator.core.taskAllocation.Human;
+import ufrgs.maslab.abstractsimulator.disaster.FireBuildingTask;
 import ufrgs.maslab.abstractsimulator.disaster.FireFighter;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
 
@@ -16,7 +18,8 @@ public class mainCore {
 		core.newEnvironment();
 		
 		try {
-			core.addAgent(FireFighter.class);
+			core.addAgent(FireFighter.class, 100);
+			core.addTask(FireBuildingTask.class, 50);
 		} catch (InstantiationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -45,6 +48,17 @@ public class mainCore {
 			System.out.println("mn "+((h.getIntelligence()-1)+(h.getReasoning()-1)+(h.getPerception()-1)));
 			System.out.println("will "+h.getWill());
 			System.out.println();
+		}
+		for(Value val : core.getEnvironment().getValues())
+		{
+			System.out.println(val.getClass());
+			FireBuildingTask t = (FireBuildingTask)val;
+			System.out.println("Attributes of building "+t.getId());
+			System.out.println("Temperature "+t.getTemperature());
+			System.out.println("Floors "+t.getFloors());
+			System.out.println("Ground Area "+t.getGroundArea());
+			System.out.println("Success "+t.getSuccess());
+			System.out.println("HP "+t.getBuildingHP());
 		}
 		
 		try {
