@@ -3,8 +3,11 @@ package ufrgs.maslab.abstractsimulator.core;
 import java.util.ArrayList;
 
 import ufrgs.maslab.abstractsimulator.core.simulators.DefaultSimulation;
-
+import ufrgs.maslab.abstractsimulator.core.taskAllocation.Human;
+import ufrgs.maslab.abstractsimulator.disaster.FireBuildingTask;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
+import ufrgs.maslab.abstractsimulator.log.FireBuildingTaskLogger;
+import ufrgs.maslab.abstractsimulator.log.HumanLogger;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
 import ufrgs.maslab.abstractsimulator.util.WriteFile;
 
@@ -74,6 +77,7 @@ public class BlackBox {
 	 */
 	public BlackBox()
 	{
+		this.newEnvironment();
 		
 	}
 	
@@ -87,9 +91,34 @@ public class BlackBox {
 			Transmitter.message(this.messageFileName, "message.environment");
 	}
 	
-	public void addAgent(Class<? extends Variable> agentClass) throws InstantiationException, IllegalAccessException{
-		Variable var = agentClass.newInstance();
-		this.env.getVariables().add(var);
+	/**
+	 * <ul>
+	 *  <li>function to define the ammount of variables of the environment</li>
+	 * </ul>
+	 * 
+	 * @param agentClass Class of the variable
+	 * @param ammount Ammount of the variable
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
+	public void addAgent(Class<? extends Variable> agentClass, Integer ammount) throws InstantiationException, IllegalAccessException{
+		this.getEnvironment().registerVariable(agentClass, ammount);
+		for(int i = 0; i < ammount; i++){
+			Variable var = agentClass.newInstance();
+			HumanLogger.logHuman((Human)var);
+			this.env.getVariables().add(var);
+			
+		}
+	}
+	
+	public void addTask(Class<? extends Value> taskClass, Integer ammount) throws InstantiationException, IllegalAccessException{
+		this.getEnvironment().registerValue(taskClass, ammount);
+		for(int i = 0; i < ammount; i++)
+		{
+			Value val = taskClass.newInstance();
+			FireBuildingTaskLogger.logFireBuildingTask((FireBuildingTask)val);
+			this.env.getValues().add(val);
+		}
 	}
 
 	/**
