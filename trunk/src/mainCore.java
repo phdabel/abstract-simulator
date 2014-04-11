@@ -1,10 +1,11 @@
 import ufrgs.maslab.abstractsimulator.core.BlackBox;
 import ufrgs.maslab.abstractsimulator.core.Variable;
 import ufrgs.maslab.abstractsimulator.core.Value;
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Human;
-import ufrgs.maslab.abstractsimulator.disaster.FireBuildingTask;
-import ufrgs.maslab.abstractsimulator.disaster.FireFighter;
+import ufrgs.maslab.abstractsimulator.core.simulators.basic.PerceptionSimulator;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
+import ufrgs.maslab.abstractsimulator.values.FireBuildingTask;
+import ufrgs.maslab.abstractsimulator.variables.FireFighter;
+import ufrgs.maslab.abstractsimulator.variables.Human;
 
 
 public class mainCore {
@@ -20,12 +21,20 @@ public class mainCore {
 		try {
 			core.addAgent(FireFighter.class, 100);
 			core.addTask(FireBuildingTask.class, 50);
+			core.addSimulation(PerceptionSimulator.class);
 		} catch (InstantiationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (IllegalAccessException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		}
+		
+		try {
+			core.simulationStart();
+		} catch (SimulatorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		for(Variable var : core.getEnvironment().getVariables())
@@ -47,6 +56,9 @@ public class mainCore {
 			System.out.println("sc "+((h.getCharisma()-1)+(h.getAppearance()-1)+(h.getLeadership()-1)));
 			System.out.println("mn "+((h.getIntelligence()-1)+(h.getReasoning()-1)+(h.getPerception()-1)));
 			System.out.println("will "+h.getWill());
+			System.out.println("x "+h.getX());
+			System.out.println("y "+h.getY());
+			System.out.println("domain "+h.getDomain().size());
 			System.out.println();
 		}
 		for(Value val : core.getEnvironment().getValues())
@@ -59,14 +71,11 @@ public class mainCore {
 			System.out.println("Ground Area "+t.getGroundArea());
 			System.out.println("Success "+t.getSuccess());
 			System.out.println("HP "+t.getBuildingHP());
+			System.out.println("x "+t.getX());
+			System.out.println("y "+t.getY());
 		}
 		
-		try {
-			core.simulationStart();
-		} catch (SimulatorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		
 		
 	}

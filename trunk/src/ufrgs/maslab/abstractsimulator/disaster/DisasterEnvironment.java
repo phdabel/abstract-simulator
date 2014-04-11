@@ -3,8 +3,8 @@ package ufrgs.maslab.abstractsimulator.disaster;
 import java.util.ArrayList;
 
 import ufrgs.maslab.abstractsimulator.core.Environment;
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Agent;
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Task;
+import ufrgs.maslab.abstractsimulator.values.Task;
+import ufrgs.maslab.abstractsimulator.variables.Agent;
 
 public class DisasterEnvironment<T extends Task, A extends Agent<T>> extends Environment<T,A> {
 	

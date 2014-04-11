@@ -6,10 +6,10 @@ import java.util.Random;
 import ufrgs.maslab.abstractsimulator.constants.Matter;
 import ufrgs.maslab.abstractsimulator.constants.Temperature;
 import ufrgs.maslab.abstractsimulator.core.Variable;
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Agent;
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Task;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
 import ufrgs.maslab.abstractsimulator.util.WriteFile;
+import ufrgs.maslab.abstractsimulator.values.Task;
+import ufrgs.maslab.abstractsimulator.variables.Agent;
 
 public class DisasterSimulation<T extends Task, A extends Agent<T>>{
 	

@@ -1,6 +1,6 @@
 package ufrgs.maslab.abstractsimulator.core.message;
 
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Agent;
+import ufrgs.maslab.abstractsimulator.variables.Agent;
 
 public class Message {
 	

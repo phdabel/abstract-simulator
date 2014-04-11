@@ -1,8 +1,8 @@
 package ufrgs.maslab.abstractsimulator.log;
 
-import ufrgs.maslab.abstractsimulator.disaster.FireBuildingTask;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
 import ufrgs.maslab.abstractsimulator.util.WriteFile;
+import ufrgs.maslab.abstractsimulator.values.FireBuildingTask;
 
 public class FireBuildingTaskLogger {
 	

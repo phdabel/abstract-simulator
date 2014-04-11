@@ -3,13 +3,13 @@ package ufrgs.maslab.abstractsimulator.core;
 import java.util.ArrayList;
 
 import ufrgs.maslab.abstractsimulator.core.simulators.DefaultSimulation;
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Human;
-import ufrgs.maslab.abstractsimulator.disaster.FireBuildingTask;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
 import ufrgs.maslab.abstractsimulator.log.FireBuildingTaskLogger;
 import ufrgs.maslab.abstractsimulator.log.HumanLogger;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
 import ufrgs.maslab.abstractsimulator.util.WriteFile;
+import ufrgs.maslab.abstractsimulator.values.FireBuildingTask;
+import ufrgs.maslab.abstractsimulator.variables.Human;
 
 public class BlackBox {
 	
@@ -156,8 +156,10 @@ public class BlackBox {
 	public void simulationStart() throws SimulatorException{
 		if(this.getSimulation().isEmpty())
 			throw new SimulatorException(Transmitter.getProperty(this.exceptionFileName, "exception.no.simulator"));
-		while(this.time <= this.timesteps)
+		while(this.time <= this.timesteps){
 			this.simulationStep();
+			this.time++;
+		}
 
 		WriteFile.getInstance().closeFile();
 		Transmitter.message(this.configFileName, "final.message");
@@ -167,7 +169,15 @@ public class BlackBox {
 	 * perform one simulation step
 	 */
 	private void simulationStep(){
-		
+		for(DefaultSimulation sim : this.getSimulation())
+		{
+			try {
+				sim.simulate(this.env);
+			} catch (SimulatorException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**

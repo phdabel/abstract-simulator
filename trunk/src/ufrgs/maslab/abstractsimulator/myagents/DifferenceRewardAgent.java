@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Agent;
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Task;
+import ufrgs.maslab.abstractsimulator.values.Task;
+import ufrgs.maslab.abstractsimulator.variables.Agent;
 
 public class DifferenceRewardAgent<T extends Task> extends Agent<T>{
 	

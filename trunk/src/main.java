@@ -14,10 +14,10 @@ import javax.swing.JFrame;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Task;
 import ufrgs.maslab.abstractsimulator.disaster.DisasterSimulation;
 import ufrgs.maslab.abstractsimulator.myagents.GSOMAgent;
 import ufrgs.maslab.abstractsimulator.util.WriteFile;
+import ufrgs.maslab.abstractsimulator.values.Task;
 import ufrgs.maslab.gsom.learning.GSOMLearning;
 import ufrgs.maslab.gsom.network.GrowingSelfOrganizingMap;
 import ufrgs.maslab.gsom.norm.Template;

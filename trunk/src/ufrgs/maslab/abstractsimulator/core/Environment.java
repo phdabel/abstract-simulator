@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Agent;
 import ufrgs.maslab.abstractsimulator.log.EnvironmentLogger;
 import ufrgs.maslab.abstractsimulator.log.FireBuildingTaskLogger;
 import ufrgs.maslab.abstractsimulator.log.HumanLogger;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
+import ufrgs.maslab.abstractsimulator.variables.Agent;
 
 public class Environment<E extends Entity> extends Entity {
 

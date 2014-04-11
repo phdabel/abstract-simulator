@@ -19,6 +19,7 @@ public abstract class Entity implements Serializable {
 	 */
 	private int id;
 	
+		
 	/**
 	 * <ul>
 	 * <li>constructor generates a new id number to each entity</li>
