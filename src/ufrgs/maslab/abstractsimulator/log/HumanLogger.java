@@ -1,8 +1,8 @@
 package ufrgs.maslab.abstractsimulator.log;
 
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Human;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
 import ufrgs.maslab.abstractsimulator.util.WriteFile;
+import ufrgs.maslab.abstractsimulator.variables.Human;
 
 public class HumanLogger {
 	

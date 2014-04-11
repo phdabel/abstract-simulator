@@ -2,7 +2,7 @@ package ufrgs.maslab.abstractsimulator.core;
 
 import java.util.ArrayList;
 
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Task;
+import ufrgs.maslab.abstractsimulator.values.Task;
 
 public abstract class Variable extends Entity {
 
@@ -52,6 +52,8 @@ public abstract class Variable extends Entity {
 
 	public Variable() {
 		super();
+		this.setX(this.rollDices());
+		this.setY(this.rollDices());
 	}
 
 	/**
@@ -92,16 +94,7 @@ public abstract class Variable extends Entity {
 	 * @param time
 	 */
 	public abstract void act(int time);
-	
-	/**
-	 * <ul>
-	 * <li>abstract function sense</li>
-	 * <li>sense will be executed by simulator engine</li>
-	 * </ul>
-	 * @param time
-	 */
-	public abstract void sense(int time);
-
+		
 	/**
 	 * <ul>
 	 * <li>returns the domain of the variable</li>

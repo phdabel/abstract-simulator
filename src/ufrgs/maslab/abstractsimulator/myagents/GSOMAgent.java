@@ -4,8 +4,8 @@ package ufrgs.maslab.abstractsimulator.myagents;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Agent;
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Task;
+import ufrgs.maslab.abstractsimulator.values.Task;
+import ufrgs.maslab.abstractsimulator.variables.Agent;
 
 public class GSOMAgent<T extends Task> extends Agent<T>{
 

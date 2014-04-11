@@ -2,7 +2,7 @@ package ufrgs.maslab.abstractsimulator.core;
 
 import java.util.ArrayList;
 
-import ufrgs.maslab.abstractsimulator.core.taskAllocation.Human;
+import ufrgs.maslab.abstractsimulator.variables.Human;
 
 
 public abstract class Value extends Entity implements Comparable<Value> {
@@ -12,9 +12,9 @@ public abstract class Value extends Entity implements Comparable<Value> {
 	 */
 	private static final long serialVersionUID = -5767460036572644735L;
 	
-	private int x;
+	private Double x;
 	
-	private int y;
+	private Double y;
 	
 	private ArrayList<Class<Human>> performer = new ArrayList<Class<Human>>();
 	
@@ -41,19 +41,19 @@ public abstract class Value extends Entity implements Comparable<Value> {
 		super();
 	}
 
-	public int getX() {
+	public Double getX() {
 		return x;
 	}
 
-	public void setX(int x) {
+	public void setX(Double x) {
 		this.x = x;
 	}
 
-	public int getY() {
+	public Double getY() {
 		return y;
 	}
 
-	public void setY(int y) {
+	public void setY(Double y) {
 		this.y = y;
 	}
 	
