@@ -48,6 +48,7 @@ public class PerceptionSimulator extends DefaultSimulation {
 					domain.add(val.getId());
 				
 			}
+			env.findVariableByID(var.getId(), var.getClass()).getDomain().clear();
 			env.findVariableByID(var.getId(), var.getClass()).setDomain(domain);
 		}
 		
