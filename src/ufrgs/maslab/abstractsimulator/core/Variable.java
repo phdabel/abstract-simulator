@@ -2,6 +2,8 @@ package ufrgs.maslab.abstractsimulator.core;
 
 import java.util.ArrayList;
 
+import ufrgs.maslab.abstractsimulator.mailbox.MailBox;
+import ufrgs.maslab.abstractsimulator.mailbox.message.Message;
 import ufrgs.maslab.abstractsimulator.values.Task;
 
 public abstract class Variable extends Entity {
@@ -31,9 +33,7 @@ public abstract class Variable extends Entity {
 	 * </ul>
 	 */
 	private int time = 0;
-	
 
-	
 	/**
 	 * <ul>
 	 * <li>domain of the variable</li>
@@ -45,6 +45,8 @@ public abstract class Variable extends Entity {
 	private double x;
 	
 	private double y;
+	
+	private MailBox mail = new MailBox();
 	
 	public Variable(Integer id) {
 		super(id);
@@ -184,6 +186,19 @@ public abstract class Variable extends Entity {
 	public void setX(double x){
 		this.x = x;
 	}
+
+	/**
+	 * return all new messages
+	 * @return
+	 */
+	public ArrayList<Message> getNewMail() {
+		return mail.getInBox();
+	}
+	
+	
+	
+	
+
 	
 
 }
