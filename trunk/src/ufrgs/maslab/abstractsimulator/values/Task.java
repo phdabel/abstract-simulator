@@ -1,6 +1,7 @@
 package ufrgs.maslab.abstractsimulator.values;
 
 import ufrgs.maslab.abstractsimulator.core.Value;
+import ufrgs.maslab.abstractsimulator.log.TaskLogger;
 
 public class Task extends Value  {
 
@@ -17,6 +18,16 @@ public class Task extends Value  {
 	public Task(Integer id)
 	{
 		super(id);
+	}
+
+	@Override
+	public void logger() {
+		TaskLogger.logTask(this);		
+	}
+
+	@Override
+	public void header() {
+		TaskLogger.saveHeader();
 	}
 	
 	

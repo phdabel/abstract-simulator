@@ -48,6 +48,8 @@ public abstract class DefaultSimulation {
 	}
 	
 	public abstract void simulate(Entity entity) throws SimulatorException;
+	
+	public abstract void simulate(Entity... entity) throws SimulatorException;
 
 	public Integer getDifficulty() {
 		return difficulty;

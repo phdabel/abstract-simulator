@@ -97,6 +97,10 @@ public abstract class Value extends Entity implements Comparable<Value> {
 		}
 		return 0;
 	}
+	
+	public abstract void logger();
+	
+	public abstract void header();
 
 
 }

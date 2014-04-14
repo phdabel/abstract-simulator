@@ -195,10 +195,9 @@ public abstract class Variable extends Entity {
 		return mail.getInBox();
 	}
 	
-	
-	
-	
+	public abstract void logger();
 
+	public abstract void header();
 	
 
 }

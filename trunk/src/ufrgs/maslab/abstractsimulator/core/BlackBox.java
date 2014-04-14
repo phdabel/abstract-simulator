@@ -3,13 +3,11 @@ package ufrgs.maslab.abstractsimulator.core;
 import java.util.ArrayList;
 
 import ufrgs.maslab.abstractsimulator.core.simulators.DefaultSimulation;
+import ufrgs.maslab.abstractsimulator.core.simulators.basic.CommunicationSimulation;
+import ufrgs.maslab.abstractsimulator.core.simulators.basic.PerceptionSimulator;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
-import ufrgs.maslab.abstractsimulator.log.FireBuildingTaskLogger;
-import ufrgs.maslab.abstractsimulator.log.HumanLogger;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
 import ufrgs.maslab.abstractsimulator.util.WriteFile;
-import ufrgs.maslab.abstractsimulator.values.FireBuildingTask;
-import ufrgs.maslab.abstractsimulator.variables.Human;
 
 public class BlackBox {
 	
@@ -38,12 +36,12 @@ public class BlackBox {
 	/**
 	 *  initial variables (agents)
 	 */
-	private int initialAgents = Transmitter.getIntConfigParameter(this.configFileName, "config.variables");
+	//private int initialAgents = Transmitter.getIntConfigParameter(this.configFileName, "config.variables");
 	
 	/**
 	 * initial values (tasks)
 	 */
-	private int initialTasks = Transmitter.getIntConfigParameter(this.configFileName, "config.values");
+	//private int initialTasks = Transmitter.getIntConfigParameter(this.configFileName, "config.values");
 	
 	/**
 	 *  total timesteps
@@ -78,6 +76,14 @@ public class BlackBox {
 	public BlackBox()
 	{
 		this.newEnvironment();
+		/**
+		 * insert the perception simulation (1st simulator)
+		 */
+		this.addSimulation(PerceptionSimulator.class);
+		/**
+		 * insert the communication simulation (2nd simulator)
+		 */
+		this.addSimulation(CommunicationSimulation.class);
 		
 	}
 	
@@ -105,7 +111,10 @@ public class BlackBox {
 		this.getEnvironment().registerVariable(agentClass, ammount);
 		for(int i = 0; i < ammount; i++){
 			Variable var = agentClass.newInstance();
-			HumanLogger.logHuman((Human)var);
+			if(i == 0)
+				var.header();
+			var.logger();
+			//HumanLogger.logHuman((Human)var);
 			this.env.getVariables().add(var);
 			
 		}
@@ -116,7 +125,10 @@ public class BlackBox {
 		for(int i = 0; i < ammount; i++)
 		{
 			Value val = taskClass.newInstance();
-			FireBuildingTaskLogger.logFireBuildingTask((FireBuildingTask)val);
+			if(i == 0)
+				val.header();
+			val.logger();
+			//FireBuildingTaskLogger.logFireBuildingTask((FireBuildingTask)val);
 			this.env.getValues().add(val);
 		}
 	}
@@ -167,17 +179,28 @@ public class BlackBox {
 	
 	/**
 	 * perform one simulation step
+	 * @throws SimulatorException 
 	 */
-	private void simulationStep(){
-		for(DefaultSimulation sim : this.getSimulation())
+	private void simulationStep() throws SimulatorException{
+		/**
+		 * updates the agent view and runs commands for all agents
+		 */
+		for(Variable var : this.env.getVariables())
 		{
-			try {
-				sim.simulate(this.env);
-			} catch (SimulatorException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			//runs the perception simulator to update the current agent view
+			if(this.getSimulation().get(0) instanceof PerceptionSimulator)
+				this.getSimulation().get(0).simulate(var, this.getEnvironment());
+			
+			//runs the act command for each agent
+			var.act(this.time);
 		}
+		
+		if(this.getSimulation().get(1) instanceof CommunicationSimulation)
+			this.getSimulation().get(1).simulate(this.env);
+		
+		/**
+		 * perform the simulations except perception simulator
+		 */
 	}
 
 	/**

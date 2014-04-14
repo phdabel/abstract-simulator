@@ -3,7 +3,10 @@ package ufrgs.maslab.abstractsimulator.variables;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import ufrgs.maslab.abstractsimulator.constants.MessageType;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
+import ufrgs.maslab.abstractsimulator.log.HumanLogger;
+import ufrgs.maslab.abstractsimulator.mailbox.message.Message;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
 
 public class Human extends Agent {
@@ -45,6 +48,15 @@ public class Human extends Agent {
 	 */
 	private int will = 5;
 	private int hp = 7;
+	
+	/**
+	 * <ul>
+	 * <li>ear of the human</li>
+	 * <li>all messages comes here first</li>
+	 * </ul>
+	 */
+	private ArrayList<Message> ear = new ArrayList<Message>();
+	
 	
 	/**
 	 * <ul>
@@ -345,6 +357,33 @@ public class Human extends Agent {
 	public void act(int time) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public ArrayList<Message> getEar() {
+		return ear;
+	}
+
+	public void setEar(ArrayList<Message> ear) {
+		this.ear = ear;
+	}
+	
+	public void logger(){
+		HumanLogger.logHuman(this);
+	}
+	
+	public void header(){
+		HumanLogger.saveHeader();
+	}
+
+	/**
+	 * send voice message
+	 * @param mouth
+	 * @throws SimulatorException 
+	 */
+	protected void sendVoiceMessage(Message message) throws SimulatorException {
+		if(message.getType() != MessageType.VOICE)
+			throw new SimulatorException(Transmitter.getProperty("exception.properties", "exception.not.voice.message"));
+		this.getVoice().add(message);
 	}
 
 	
