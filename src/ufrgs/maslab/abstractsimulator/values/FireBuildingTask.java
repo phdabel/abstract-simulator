@@ -3,6 +3,7 @@ package ufrgs.maslab.abstractsimulator.values;
 import ufrgs.maslab.abstractsimulator.constants.Damage;
 import ufrgs.maslab.abstractsimulator.constants.Matter;
 import ufrgs.maslab.abstractsimulator.constants.Temperature;
+import ufrgs.maslab.abstractsimulator.log.FireBuildingTaskLogger;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
 
 public class FireBuildingTask extends Task {
@@ -199,6 +200,14 @@ public class FireBuildingTask extends Task {
 
 	public void setSuccess(int success) {
 		this.success = success;
+	}
+	
+	public void logger(){
+		FireBuildingTaskLogger.logFireBuildingTask(this);
+	}
+	
+	public void header(){
+		FireBuildingTaskLogger.saveHeader();
 	}
 	
 	

@@ -1,12 +1,11 @@
 import ufrgs.maslab.abstractsimulator.core.BlackBox;
-import ufrgs.maslab.abstractsimulator.core.Variable;
 import ufrgs.maslab.abstractsimulator.core.Value;
-import ufrgs.maslab.abstractsimulator.core.simulators.basic.PerceptionSimulator;
+import ufrgs.maslab.abstractsimulator.core.Variable;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
 import ufrgs.maslab.abstractsimulator.values.FireBuildingTask;
 import ufrgs.maslab.abstractsimulator.variables.FireFighter;
+import ufrgs.maslab.abstractsimulator.variables.FireStation;
 import ufrgs.maslab.abstractsimulator.variables.Human;
-
 
 public class mainCore {
 
@@ -19,9 +18,15 @@ public class mainCore {
 		core.newEnvironment();
 		
 		try {
-			core.addAgent(FireFighter.class, 100);
+			/**
+			 * insert fire fighter agents
+			 * insert fire building tasks
+			 * insert fire station agents
+			 */
+			core.addAgent(FireFighter.class, 5);
 			core.addTask(FireBuildingTask.class, 50);
-			core.addSimulation(PerceptionSimulator.class);
+			core.addAgent(FireStation.class, 2);
+			
 		} catch (InstantiationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -36,30 +41,38 @@ public class mainCore {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		/*
 		for(Variable var : core.getEnvironment().getVariables())
 		{
 			System.out.println(var.getClass());
-			
-			Human h = (Human)var;
-			System.out.println("Attributes of Human "+h.getId());
-			System.out.println("Strength "+h.getStrength());
-			System.out.println("Dexterity "+h.getDexterity());
-			System.out.println("Stamina "+h.getStamina());
-			System.out.println("Charisma "+h.getCharisma());
-			System.out.println("Appearance "+h.getAppearance());
-			System.out.println("Leadership "+h.getLeadership());
-			System.out.println("Intelligence "+h.getIntelligence());
-			System.out.println("Reasoning "+h.getReasoning());
-			System.out.println("Perception "+h.getPerception());
-			System.out.println("ph "+((h.getStrength()-1)+(h.getDexterity()-1)+(h.getStamina()-1)));
-			System.out.println("sc "+((h.getCharisma()-1)+(h.getAppearance()-1)+(h.getLeadership()-1)));
-			System.out.println("mn "+((h.getIntelligence()-1)+(h.getReasoning()-1)+(h.getPerception()-1)));
-			System.out.println("will "+h.getWill());
-			System.out.println("x "+h.getX());
-			System.out.println("y "+h.getY());
-			System.out.println("domain "+h.getDomain().size());
-			System.out.println();
+			if(var instanceof Human){
+				Human h = (Human)var;
+				System.out.println("Attributes of Human "+h.getId());
+				System.out.println("Strength "+h.getStrength());
+				System.out.println("Dexterity "+h.getDexterity());
+				System.out.println("Stamina "+h.getStamina());
+				System.out.println("Charisma "+h.getCharisma());
+				System.out.println("Appearance "+h.getAppearance());
+				System.out.println("Leadership "+h.getLeadership());
+				System.out.println("Intelligence "+h.getIntelligence());
+				System.out.println("Reasoning "+h.getReasoning());
+				System.out.println("Perception "+h.getPerception());
+				System.out.println("ph "+((h.getStrength()-1)+(h.getDexterity()-1)+(h.getStamina()-1)));
+				System.out.println("sc "+((h.getCharisma()-1)+(h.getAppearance()-1)+(h.getLeadership()-1)));
+				System.out.println("mn "+((h.getIntelligence()-1)+(h.getReasoning()-1)+(h.getPerception()-1)));
+				System.out.println("will "+h.getWill());
+				System.out.println("x "+h.getX());
+				System.out.println("y "+h.getY());
+				System.out.println("domain "+h.getDomain().size());
+				System.out.println();
+			}else if(var instanceof FireStation){
+				FireStation h = (FireStation)var;
+				System.out.println("Attributes of the Fire Station "+h.getId());
+				System.out.println("x "+h.getX());
+				System.out.println("y "+h.getY());
+				System.out.println("domain "+h.getDomain().size());
+				System.out.println();
+			}
 		}
 		for(Value val : core.getEnvironment().getValues())
 		{
@@ -73,7 +86,7 @@ public class mainCore {
 			System.out.println("HP "+t.getBuildingHP());
 			System.out.println("x "+t.getX());
 			System.out.println("y "+t.getY());
-		}
+		}*/
 		
 		
 		

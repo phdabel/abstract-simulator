@@ -82,8 +82,6 @@ public class Environment<E extends Entity> extends Entity {
 	{
 		super();
 		EnvironmentLogger.saveHeader();
-		HumanLogger.saveHeader();
-		FireBuildingTaskLogger.saveHeader();
 		
 	}
 	

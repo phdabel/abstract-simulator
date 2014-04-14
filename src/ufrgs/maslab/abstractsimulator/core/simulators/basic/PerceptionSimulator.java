@@ -18,22 +18,30 @@ public class PerceptionSimulator extends DefaultSimulation {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void simulate(Entity env) throws SimulatorException {
-		if(env instanceof Environment)
-			this.sense((Environment<Entity>)env);
+	public void simulate(Entity... args) throws SimulatorException {
+		Variable var = null;
+		Environment<Entity> env = null;
+		for(Entity e : args)
+		{
+			if(e instanceof Variable)
+				var = (Variable)e;
+			if(e instanceof Environment)
+				env = (Environment<Entity>)e;
+		}
+		if(var != null && env != null)
+			this.sense((Variable)var, (Environment<Entity>)env);
 		
 		
 	}
 	
 	/**
-	 * function to analyse the environment and to define the domain of each agent
+	 * function to analyse the variable and to define the domain of each agent
 	 * based on the radius parameter.
 	 * @param env
 	 * @throws SimulatorException
 	 */
-	private void sense(Environment<Entity> env) throws SimulatorException{
-		for(Variable var : env.getVariables())
-		{
+	private void sense(Variable var, Environment<Entity> env) throws SimulatorException{
+		
 			ArrayList<Double> e1 = new ArrayList<Double>(
 				    Arrays.asList(var.getX(), var.getY()));
 			
@@ -50,7 +58,11 @@ public class PerceptionSimulator extends DefaultSimulation {
 			}
 			env.findVariableByID(var.getId(), var.getClass()).getDomain().clear();
 			env.findVariableByID(var.getId(), var.getClass()).setDomain(domain);
-		}
+		
+	}
+
+	@Override
+	public void simulate(Entity entity) throws SimulatorException {
 		
 	}
 	
