@@ -1,5 +1,7 @@
 package ufrgs.maslab.abstractsimulator.mailbox.message;
 
+import ufrgs.maslab.abstractsimulator.core.Entity;
+
 public class AgentMessage extends Message {
 	
 	private Integer agentId;
@@ -30,6 +32,12 @@ public class AgentMessage extends Message {
 
 	public void setY(Double y) {
 		this.y = y;
+	}
+
+	@Override
+	public void configureContent(Entity content) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

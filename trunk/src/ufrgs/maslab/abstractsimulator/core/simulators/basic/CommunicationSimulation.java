@@ -1,12 +1,15 @@
 package ufrgs.maslab.abstractsimulator.core.simulators.basic;
 
+
 import ufrgs.maslab.abstractsimulator.constants.MessageType;
 import ufrgs.maslab.abstractsimulator.core.Entity;
 import ufrgs.maslab.abstractsimulator.core.Environment;
+import ufrgs.maslab.abstractsimulator.core.Value;
 import ufrgs.maslab.abstractsimulator.core.Variable;
 import ufrgs.maslab.abstractsimulator.core.simulators.DefaultSimulation;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
 import ufrgs.maslab.abstractsimulator.mailbox.message.Message;
+import ufrgs.maslab.abstractsimulator.mailbox.message.TaskMessage;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
 import ufrgs.maslab.abstractsimulator.variables.Agent;
 import ufrgs.maslab.abstractsimulator.variables.Human;
@@ -16,23 +19,27 @@ public class CommunicationSimulation extends DefaultSimulation {
 
 	private String exceptionFile = "exception.properties";
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void simulate(Entity entity) throws SimulatorException {
 		if(!(entity instanceof Environment))
 			throw new SimulatorException(Transmitter.getProperty(this.exceptionFile, "exception.not.environment"));
 		
-		@SuppressWarnings("unchecked")
 		Environment<Entity> env = (Environment<Entity>)entity;
 		for(Variable v : env.getVariables())
 		{
-			for(Message m : ((Agent)v).getVoice())
+			Agent a = (Agent)v;
+			for(int k = 0; k < a.getVoice().size(); k++)
 			{
-				if(m.getBroadCast())
+				if(a.getVoice().get(k) instanceof TaskMessage){
+					a.getVoice().get(k).configureContent(env.findValueByID(a.getVoice().get(k).getContent(),(Class<? extends Value>) a.getVoice().get(k).getContentClass()));
+				}
+				if(a.getVoice().get(k).getBroadCast())
 				{
-					this.broadcastMessage(v, env, m);
+					this.broadcastMessage(v, env, a.getVoice().get(k));
 				}else{
-					Entity r = env.findVariableByID(m.getToAgent(), m.getToClass());
-					this.sendDirectedVoiceMessage(v, r, m);
+					Entity r = env.findVariableByID(a.getVoice().get(k).getToAgent(), a.getVoice().get(k).getToClass());
+					this.sendDirectedVoiceMessage(v, r, a.getVoice().get(k));
 				}
 			}
 		}

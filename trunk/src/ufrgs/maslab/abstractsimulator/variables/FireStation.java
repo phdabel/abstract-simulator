@@ -23,7 +23,7 @@ public class FireStation extends Agent implements Building{
 	}
 	
 	public void act(int time){
-		System.out.println("Messages received: ");
+		System.out.println("Messages received: "+this.getRadioMessage().size());
 	}
 	
 	@Override

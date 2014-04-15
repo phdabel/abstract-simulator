@@ -74,14 +74,14 @@ public class FireFighter extends Human implements Platoon {
 	public void act(int time){
 		if(time < 3)
 		{
-			for(Integer t : this.getDomain())
+			for(Integer t : this.getDomain().keySet())
 			{
-			}
-			try {
-				this.sendRadioMessage(new FireBuildingTaskMessage(null, null, null, null));
-			} catch (SimulatorException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				try {
+					this.sendRadioMessage(new FireBuildingTaskMessage(t, this.getDomain().get(t), this, MessageType.RADIO));
+				} catch (SimulatorException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		/*

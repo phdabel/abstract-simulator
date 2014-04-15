@@ -3,6 +3,7 @@ package ufrgs.maslab.abstractsimulator.mailbox.message;
 import ufrgs.maslab.abstractsimulator.constants.Matter;
 import ufrgs.maslab.abstractsimulator.constants.MessageType;
 import ufrgs.maslab.abstractsimulator.constants.Temperature;
+import ufrgs.maslab.abstractsimulator.core.Entity;
 import ufrgs.maslab.abstractsimulator.values.FireBuildingTask;
 import ufrgs.maslab.abstractsimulator.variables.Agent;
 
@@ -25,7 +26,7 @@ public class FireBuildingTaskMessage extends TaskMessage {
 	 * 
 	 * @param t
 	 */
-	public FireBuildingTaskMessage(FireBuildingTask t){
+	public void configureContent(FireBuildingTask t){
 		this.setApartmentsPerFloor(t.getApartmentsPerFloor());
 		this.setBuildingHP(t.getBuildingHP());
 		this.setFloors(t.getFloors());
@@ -43,9 +44,11 @@ public class FireBuildingTaskMessage extends TaskMessage {
 	 * @param t
 	 * @param sender
 	 */
-	public FireBuildingTaskMessage(FireBuildingTask t, Agent sender, MessageType type)
+	public FireBuildingTaskMessage(Integer tid, Class<? extends Entity> taskClass, Agent sender, MessageType type)
 	{
-		this(t);
+		this.setContent(tid);
+		this.setContentClass(taskClass);
+		this.setTaskId(tid);
 		this.setFromAgent(sender.getId());
 		this.setFromClass(sender.getClass());
 		this.setType(type);
@@ -53,12 +56,12 @@ public class FireBuildingTaskMessage extends TaskMessage {
 		
 	}
 	
-	public FireBuildingTaskMessage(FireBuildingTask t, Agent sender, Agent receiver, MessageType type)
+	public FireBuildingTaskMessage(Integer t, Class<? extends Entity> taskClass, Agent sender, Integer receiver, MessageType type)
 	{
-		this(t, sender, type);
+		this(t, taskClass, sender, type);
 		this.setBroadCast(false);
-		this.setToAgent(receiver.getId());
-		this.setToClass(receiver.getClass());
+		this.setToAgent(receiver);
+		//this.setToClass(receiver.getClass());
 	}
 
 	public Temperature getTemperature() {

@@ -271,7 +271,6 @@ public class Environment<E extends Entity> extends Entity {
 	 */
 	public Value findValueByID(int idx, Class<? extends Value> clazz){
 		Value v = null;
-		
 		try {
 			v = clazz.getConstructor(Integer.class).newInstance(idx);
 			//v = this.valClass.getConstructor(Integer.class).newInstance(idx);

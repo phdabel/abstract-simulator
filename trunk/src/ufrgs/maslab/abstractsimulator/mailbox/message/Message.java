@@ -2,6 +2,7 @@ package ufrgs.maslab.abstractsimulator.mailbox.message;
 
 
 import ufrgs.maslab.abstractsimulator.constants.MessageType;
+import ufrgs.maslab.abstractsimulator.core.Entity;
 import ufrgs.maslab.abstractsimulator.variables.Agent;
 
 public abstract class Message {
@@ -10,6 +11,10 @@ public abstract class Message {
 	
 	private int toAgent;
 	
+	private int content;
+	
+	private Class<? extends Entity> contentClass;
+	
 	private Class<? extends Agent> fromClass;
 	
 	private Class<? extends Agent> toClass;
@@ -17,6 +22,8 @@ public abstract class Message {
 	private MessageType type;
 	
 	private Boolean broadCast = true;
+	
+	public abstract void configureContent(Entity content);
 	
 	public int getFromAgent() {
 		return fromAgent;
@@ -65,6 +72,22 @@ public abstract class Message {
 
 	public void setType(MessageType type) {
 		this.type = type;
+	}
+
+	public int getContent() {
+		return content;
+	}
+
+	public void setContent(int content) {
+		this.content = content;
+	}
+
+	public Class<? extends Entity> getContentClass() {
+		return contentClass;
+	}
+
+	public void setContentClass(Class<? extends Entity> contentClass) {
+		this.contentClass = contentClass;
 	}
 	
 	

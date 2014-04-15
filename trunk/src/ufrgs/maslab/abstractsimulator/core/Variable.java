@@ -1,6 +1,7 @@
 package ufrgs.maslab.abstractsimulator.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import ufrgs.maslab.abstractsimulator.mailbox.MailBox;
 import ufrgs.maslab.abstractsimulator.mailbox.message.Message;
@@ -37,10 +38,11 @@ public abstract class Variable extends Entity {
 	/**
 	 * <ul>
 	 * <li>domain of the variable</li>
-	 * <li>set of values which this variable can assign</li>
+	 * <li>map of values</li>
+	 * <li>value is the key and class is the value</li>
 	 * </ul>
 	 */
-	private ArrayList<Integer> domain = new ArrayList<Integer>();
+	private HashMap<Integer,Class<? extends Entity>> domain = new HashMap<Integer,Class<? extends Entity>>();
 
 	private double x;
 	
@@ -103,19 +105,10 @@ public abstract class Variable extends Entity {
 	 * </ul>
 	 * @return
 	 */
-	public ArrayList<Integer> getDomain() {
+	public HashMap<Integer,Class<? extends Entity>> getDomain() {
 		return this.domain;
 	}
 
-	/**
-	 * <ul>
-	 * <li>set the domain of the variable</li>
-	 * </ul>
-	 * @param domain
-	 */
-	public void setDomain(ArrayList<Integer> domain) {
-		this.domain = domain;
-	}
 	
 	/**
 	 * <ul>
@@ -123,10 +116,10 @@ public abstract class Variable extends Entity {
 	 * </ul>
 	 * @param value
 	 */
-	public void insertDomain(Integer value)
+	public void insertDomain(Integer value, Class<? extends Entity>clazz)
 	{
-		if(!this.getDomain().contains(value))
-			this.getDomain().add(value);
+		if(!this.getDomain().containsKey(value))
+			this.getDomain().put(value, clazz);
 	}
 
 	/**
@@ -198,6 +191,10 @@ public abstract class Variable extends Entity {
 	public abstract void logger();
 
 	public abstract void header();
+
+	public void setDomain(HashMap<Integer, Class<? extends Entity>> domain) {
+		this.domain = domain;
+	}
 	
 
 }
