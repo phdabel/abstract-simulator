@@ -1,5 +1,7 @@
 package ufrgs.maslab.abstractsimulator.mailbox.message;
 
+import ufrgs.maslab.abstractsimulator.core.Entity;
+
 
 public class TaskMessage extends Message {
 	
@@ -10,11 +12,11 @@ public class TaskMessage extends Message {
 	private Double taskY;
 	
 	private Double taskValue;
-
+	
 	public Integer getTaskId() {
 		return taskId;
 	}
-
+	
 	public void setTaskId(Integer taskId) {
 		this.taskId = taskId;
 	}
@@ -41,6 +43,12 @@ public class TaskMessage extends Message {
 
 	public void setTaskValue(Double taskValue) {
 		this.taskValue = taskValue;
+	}
+
+	@Override
+	public void configureContent(Entity content) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
