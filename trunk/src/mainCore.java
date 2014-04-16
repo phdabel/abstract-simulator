@@ -2,6 +2,7 @@ import ufrgs.maslab.abstractsimulator.core.BlackBox;
 import ufrgs.maslab.abstractsimulator.core.Value;
 import ufrgs.maslab.abstractsimulator.core.Variable;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
+import ufrgs.maslab.abstractsimulator.util.Transmitter;
 import ufrgs.maslab.abstractsimulator.values.FireBuildingTask;
 import ufrgs.maslab.abstractsimulator.variables.FireFighter;
 import ufrgs.maslab.abstractsimulator.variables.FireStation;
@@ -23,9 +24,9 @@ public class mainCore {
 			 * insert fire building tasks
 			 * insert fire station agents
 			 */
-			core.addAgent(FireFighter.class, 5);
-			core.addTask(FireBuildingTask.class, 50);
-			core.addAgent(FireStation.class, 2);
+			core.addAgent(FireFighter.class, Transmitter.getIntConfigParameter("config.properties", "config.variables"));
+			core.addTask(FireBuildingTask.class, Transmitter.getIntConfigParameter("config.properties", "config.values"));
+			core.addAgent(FireStation.class, Transmitter.getIntConfigParameter("config.properties", "config.central"));
 			
 		} catch (InstantiationException e1) {
 			// TODO Auto-generated catch block

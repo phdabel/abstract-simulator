@@ -8,7 +8,7 @@ import java.util.Random;
 import ufrgs.maslab.abstractsimulator.values.Task;
 import ufrgs.maslab.abstractsimulator.variables.Agent;
 
-public class DifferenceRewardAgent<T extends Task> extends Agent<T>{
+public class DifferenceRewardAgent<T extends Task> extends Agent{
 	
 	
 	/**

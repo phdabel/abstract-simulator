@@ -7,7 +7,7 @@ import java.util.Queue;
 import ufrgs.maslab.abstractsimulator.values.Task;
 import ufrgs.maslab.abstractsimulator.variables.Agent;
 
-public class GSOMAgent<T extends Task> extends Agent<T>{
+public class GSOMAgent<T extends Task> extends Agent{
 
 	/**
 	 * 

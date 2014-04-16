@@ -72,8 +72,8 @@ public class FireFighter extends Human implements Platoon {
 	}
 	
 	public void act(int time){
-		if(time < 3)
-		{
+		//if(time < 3)
+		//{
 			for(Integer t : this.getDomain().keySet())
 			{
 				try {
@@ -83,7 +83,7 @@ public class FireFighter extends Human implements Platoon {
 					e.printStackTrace();
 				}
 			}
-		}
+		//}
 		/*
 		System.out.println("I'm fire fighter "+this.getId()+" at time "+time);
 		for(Integer v : this.getDomain())

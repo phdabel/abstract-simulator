@@ -3,6 +3,10 @@ package ufrgs.maslab.abstractsimulator.mailbox.message;
 public class HumanMessage extends AgentMessage {
 	
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6957318464283032931L;
+	/**
 	 * physical attributes
 	 */
 	private int strength = 1;
@@ -94,6 +98,22 @@ public class HumanMessage extends AgentMessage {
 	}
 	public void setHp(int hp) {
 		this.hp = hp;
+	}
+	
+	public String toString(){
+		String s = super.toString();
+		s += "Strength: "+this.getStrength()+" \n "
+	      + "Dexterity: "+this.getDexterity()+" \n"
+	      + "Stamina: "+this.getStamina()+" \n "
+	      + "Charisma: "+this.getCharisma()+" \n "
+	      + "Appearance: "+this.getAppearance()+" \n "
+	      + "Leadership: "+this.getLeadership()+" \n "
+	      + "Intelligence: "+this.getIntelligence()+" \n "
+	      + "Reasoning: "+this.getReasoning()+" \n "
+	      + "Perception: "+this.getPerception()+" \n "
+	      + "Will: "+this.getWill()+" \n "
+	      + "HP: "+this.getHp()+" \n ";
+	      return s;
 	}
 
 }

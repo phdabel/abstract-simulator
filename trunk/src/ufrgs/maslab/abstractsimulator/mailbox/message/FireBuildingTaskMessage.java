@@ -9,6 +9,11 @@ import ufrgs.maslab.abstractsimulator.variables.Agent;
 
 public class FireBuildingTaskMessage extends TaskMessage {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2474944316694077076L;
+
 	private Temperature temperature;
 	
 	private Matter matter;
@@ -20,6 +25,19 @@ public class FireBuildingTaskMessage extends TaskMessage {
 	private int apartmentsPerFloor;
 	
 	private int buildingHP;
+	
+	
+	public String toString()
+	{
+		String s = super.toString();
+		s += "Temperature: "+this.getTemperature()+" \n "
+				+ "Matter: "+this.getMatter()+" \n "
+				+ "Floors: "+this.getFloors() + " \n "
+				+ "Ground Area: "+this.getGroundArea()+ " \n "
+				+ "Apartments per floors: "+this.getApartmentsPerFloor()+" \n "
+				+ "HP: "+this.getBuildingHP()+" \n ";
+		return s;
+	}
 	
 	/**
 	 * basic constructor 
@@ -36,6 +54,7 @@ public class FireBuildingTaskMessage extends TaskMessage {
 		this.setGroundArea(t.getGroundArea());
 		this.setTaskX(t.getX());
 		this.setTaskY(t.getY());
+		this.setTaskValue(t.getSuccess().doubleValue());
 	}
 	
 	/**

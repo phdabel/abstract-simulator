@@ -1,12 +1,19 @@
 package ufrgs.maslab.abstractsimulator.mailbox.message;
 
 
+import java.io.Serializable;
+
 import ufrgs.maslab.abstractsimulator.constants.MessageType;
 import ufrgs.maslab.abstractsimulator.core.Entity;
 import ufrgs.maslab.abstractsimulator.variables.Agent;
 
-public abstract class Message {
+public abstract class Message implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -142739020941263551L;
+
 	private int fromAgent;
 	
 	private int toAgent;
@@ -24,6 +31,15 @@ public abstract class Message {
 	private Boolean broadCast = true;
 	
 	public abstract void configureContent(Entity content);
+	
+	public String toString()
+	{
+		String s = "From: "+this.getFromAgent()+" \n "
+				+"To: "+this.getToAgent()+" \n "
+				+"Type: "+this.getType()+" \n ";
+				
+		return s;
+	}
 	
 	public int getFromAgent() {
 		return fromAgent;
