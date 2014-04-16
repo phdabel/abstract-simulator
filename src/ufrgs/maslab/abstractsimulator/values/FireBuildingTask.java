@@ -69,7 +69,7 @@ public class FireBuildingTask extends Task {
 	 */
 	private int buildingHP;
 	
-	private int success;
+	private Integer success;
 
 	/**
 	 * <ul>
@@ -137,6 +137,7 @@ public class FireBuildingTask extends Task {
 				break;
 			
 		}
+		this.setValue(this.getSuccess().doubleValue());
 		int hp = this.getFloors() * this.getApartmentsPerFloor() + (10 ^ this.getMatter().getValue());
 		this.setBuildingHP(hp);
 		
@@ -194,7 +195,7 @@ public class FireBuildingTask extends Task {
 		this.buildingHP = buildingHP;
 	}
 
-	public int getSuccess() {
+	public Integer getSuccess() {
 		return success;
 	}
 

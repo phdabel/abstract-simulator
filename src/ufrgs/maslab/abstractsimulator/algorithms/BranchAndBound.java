@@ -7,18 +7,26 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
-//import ufrgs.maslab.abstractsimulator.core.Environment;
+import ufrgs.maslab.abstractsimulator.core.Entity;
+import ufrgs.maslab.abstractsimulator.core.Environment;
 import ufrgs.maslab.abstractsimulator.core.Value;
 import ufrgs.maslab.abstractsimulator.core.Variable;
-//import ufrgs.maslab.abstractsimulator.disaster.Task;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
-//import ufrgs.maslab.abstractsimulator.myagents.GSOMAgent;
 
-//public class BranchAndBound<Var extends Variable<Val,?>, Val extends Value<Var,?>> {
 
-public class BranchAndBound<Var extends Variable<Val>, Val extends Value> {
+public class BranchAndBound<Var extends Variable, Val extends Value> {
 	
-	public Map<Var, Val> partialAssignment = new HashMap<Var, Val>();
+	//TODO review the algorithm
+	
+	/**
+	 * Map<Variable, Value>
+	 */
+	public Map<Integer, Integer> partialAssignment = new HashMap<Integer, Integer>();
+
+	/**
+	 * map to associate classes of variables and values
+	 */
+	private HashMap<Integer, Class<? extends Entity>> classAssociation = new HashMap<Integer, Class<? extends Entity>>();
 	
 	public Double upperBound = Double.MAX_VALUE;
 	
@@ -26,13 +34,26 @@ public class BranchAndBound<Var extends Variable<Val>, Val extends Value> {
 	
 	public Double alpha = 0d;
 	
-	public Queue<Var> x = new LinkedList<Var>();
+	private Environment<Entity> env = null;
 	
-	public ArrayList<Val> d = new ArrayList<Val>();
+	/**
+	 * list of variables
+	 */
+	public Queue<Integer> x = new LinkedList<Integer>();
 	
-	public Map<Constraint<Var,Val>, Double> c = new HashMap<Constraint<Var,Val>, Double>();
+	/**
+	 * list of values
+	 */
+	public ArrayList<Integer> d = new ArrayList<Integer>();
 	
-	public BranchAndBound(Queue<Var> x, ArrayList<Val> d, Map<Constraint<Var, Val>, Double> constraints){
+	/**
+	 * constraints map
+	 * Map<Constraint<Variable, Value>,Double>
+	 * 
+	 */
+	public Map<Constraint, Double> c = new HashMap<Constraint, Double>();
+	
+	public BranchAndBound(Queue<Integer> x, ArrayList<Integer> d, Map<Constraint, Double> constraints){
 		this.x = x;
 		this.d = d;
 		this.c = constraints;
@@ -70,28 +91,35 @@ public class BranchAndBound<Var extends Variable<Val>, Val extends Value> {
 		this.upperBound = this.branchAndBound(this.partialAssignment, this.lowerBound, this.upperBound, this.x, this.d, this.c);	
 	}
 	
-	public Double branchAndBound(Map<Var, Val>pa, Double lb, Double ub, Queue<Var> x, ArrayList<Val> d, Map<Constraint<Var,Val>, Double> c) throws SimulatorException
+	@SuppressWarnings("unchecked")
+	public Double branchAndBound(Map<Integer, Integer>pa, Double lb, Double ub, Queue<Integer> x, ArrayList<Integer> d, Map<Constraint, Double> c) throws SimulatorException
 	{
 		if(x.isEmpty()){
 			this.partialAssignment.putAll(pa);
 			return lb;
 		}
 		//this.lowerBound = lb;
-		Var i = x.poll();
-		for(Val v: ((ArrayList<Val>)i.getDomain()))
+
+		
+		//variables
+		Integer tmpX = x.poll();
+		Var i = (Var) env.findVariableByID(tmpX, (Class<? extends Variable>) this.classAssociation.get(tmpX));
+		
+		for(Integer tmpD: i.getDomain().keySet())
 		{
 			
-			ArrayList<Val> dd = i.getDomain();
-			Map<Constraint<Var,Val>,Double> cc = c;
+			ArrayList<Integer> dd = (ArrayList<Integer>) i.getDomain().keySet();
+			Map<Constraint,Double> cc = c;
 			
 			this.partialAssignment.putAll(pa);
-			this.partialAssignment.put(i, v);
+			this.partialAssignment.put(i.getId(), tmpD);
 						
 			//Constraint<Var,Val> ci = new Constraint<Var,Val>(i,v);
 			
+			Val v = (Val) env.findValueByID(tmpD, (Class<? extends Value>) this.classAssociation.get(tmpD));
 			Double nLb = this.lowerBound + v.getValue();
 			
-			this.lookAhead(i, v);
+			this.lookAhead(i.getId(), tmpD);
 			
 			/*if(this.alpha != 0d){
 				nLb = nLb - (this.notAssignedTasks(this.partialAssignment));
@@ -106,17 +134,25 @@ public class BranchAndBound<Var extends Variable<Val>, Val extends Value> {
 		return this.upperBound;
 	}
 	
-	public void lookAhead(Var i, Val a){
+	@SuppressWarnings("unchecked")
+	public void lookAhead(Integer i, Integer a){
 		
 		//verify binary constraints
-		ArrayList<Var> iColeagues = new ArrayList<Var>();
-		for(Var j : iColeagues)
+		ArrayList<Integer> iColeagues = new ArrayList<Integer>();
+		for(Integer j : iColeagues)
 		{
 			if(!j.equals(i))
 			{
-				for(Val b : ((ArrayList<Val>)j.getDomain()))
+				Var varJ = (Var) env.findVariableByID(j, (Class<? extends Variable>) this.classAssociation.get(j));
+				for(Integer b : varJ.getDomain().keySet())
 				{
-					b.getId();
+					/**
+					 * TODO
+					 * do the look ahead function
+					 * 
+					 */
+					
+					//b.getId();
 					/*
 					if(resourceConstraint(this.partialAssignment,b))
 					{
@@ -142,30 +178,48 @@ public class BranchAndBound<Var extends Variable<Val>, Val extends Value> {
 		
 	}
 	
-	public boolean localConsist(Double lb, Double ub, Queue<Var> x, ArrayList<Val> d, Map<Constraint<Var,Val>, Double> c)
+	public boolean localConsist(Double lb, Double ub, Queue<Integer> x, ArrayList<Integer> d, Map<Constraint, Double> c)
 	{
 		return (ub > lb);
 	}
 	
 	
+	public Environment<Entity> getEnv() {
+		return env;
+	}
+
+	public void setEnv(Environment<Entity> env) {
+		this.env = env;
+	}
+
+
+	public HashMap<Integer, Class<? extends Entity>> getClassAssociation() {
+		return classAssociation;
+	}
+
+	public void setClassAssociation(HashMap<Integer, Class<? extends Entity>> classAssociation) {
+		this.classAssociation = classAssociation;
+	}
+
+
 	/**
 	 *  internal class - constraints
 	 *  
 	 */
-	public static class Constraint<Var, Val> {
+	public static class Constraint {
 		
 		
 		//variables
-		private Var i;
-		private Var j;
+		private Integer i;
+		private Integer j;
 		//values
-		private Val a;
-		private Val b;
+		private Integer a;
+		private Integer b;
 		private boolean binary = false;
 		private Object[] keys = new Object[4];
 		
 		
-		public Constraint(Var i, Val a)
+		public Constraint(Integer i, Integer a)
 		{
 			this.i = i;
 			this.a = a;
@@ -174,7 +228,7 @@ public class BranchAndBound<Var extends Variable<Val>, Val extends Value> {
 			this.binary = false;
 		}
 		
-		public Constraint(Var i, Val a, Var j, Val b)
+		public Constraint(Integer i, Integer a, Integer j, Integer b)
 		{
 			this.i = i;
 			this.a = a;
@@ -188,35 +242,35 @@ public class BranchAndBound<Var extends Variable<Val>, Val extends Value> {
 
 		}
 
-		public Var getI() {
+		public Integer getI() {
 			return i;
 		}
 
-		public void setI(Var i) {
+		public void setI(Integer i) {
 			this.i = i;
 		}
 
-		public Var getJ() {
+		public Integer getJ() {
 			return j;
 		}
 
-		public void setJ(Var j) {
+		public void setJ(Integer j) {
 			this.j = j;
 		}
 
-		public Val getA() {
+		public Integer getA() {
 			return a;
 		}
 
-		public void setA(Val a) {
+		public void setA(Integer a) {
 			this.a = a;
 		}
 
-		public Val getB() {
+		public Integer getB() {
 			return b;
 		}
 
-		public void setB(Val b) {
+		public void setB(Integer b) {
 			this.b = b;
 		}
 		
@@ -233,7 +287,7 @@ public class BranchAndBound<Var extends Variable<Val>, Val extends Value> {
 		}
 		
 		
-		public boolean equals(Constraint<Var,Val> obj)
+		public boolean equals(Constraint obj)
 		{
 			if(this == obj)
 				return true;
@@ -242,7 +296,7 @@ public class BranchAndBound<Var extends Variable<Val>, Val extends Value> {
 			if(getClass() != obj.getClass())
 				return false;
 			
-			final Constraint<Var,Val> other = (Constraint<Var,Val>)obj;
+			final Constraint other = (Constraint)obj;
 			return Arrays.equals(this.keys, other.keys);
 			
 		}

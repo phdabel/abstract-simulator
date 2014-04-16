@@ -5,6 +5,11 @@ import ufrgs.maslab.abstractsimulator.core.Entity;
 
 public class TaskMessage extends Message {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7044505978302233986L;
+
 	private Integer taskId;
 	
 	private Double taskX;
@@ -12,6 +17,15 @@ public class TaskMessage extends Message {
 	private Double taskY;
 	
 	private Double taskValue;
+	
+	public String toString(){
+		String s = super.toString(); 
+		s = "ID: "+this.getTaskId().toString()+" \n "
+				+"X: "+this.getTaskX()+" \n "
+				+"Y: "+this.getTaskY()+" \n "
+				+"Value: "+this.getTaskValue()+" \n ";
+		return s;
+	}
 	
 	public Integer getTaskId() {
 		return taskId;

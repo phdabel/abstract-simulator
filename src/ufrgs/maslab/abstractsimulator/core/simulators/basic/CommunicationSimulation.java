@@ -8,9 +8,11 @@ import ufrgs.maslab.abstractsimulator.core.Value;
 import ufrgs.maslab.abstractsimulator.core.Variable;
 import ufrgs.maslab.abstractsimulator.core.simulators.DefaultSimulation;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
+import ufrgs.maslab.abstractsimulator.mailbox.message.FireBuildingTaskMessage;
 import ufrgs.maslab.abstractsimulator.mailbox.message.Message;
 import ufrgs.maslab.abstractsimulator.mailbox.message.TaskMessage;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
+import ufrgs.maslab.abstractsimulator.values.FireBuildingTask;
 import ufrgs.maslab.abstractsimulator.variables.Agent;
 import ufrgs.maslab.abstractsimulator.variables.Human;
 
@@ -26,13 +28,27 @@ public class CommunicationSimulation extends DefaultSimulation {
 			throw new SimulatorException(Transmitter.getProperty(this.exceptionFile, "exception.not.environment"));
 		
 		Environment<Entity> env = (Environment<Entity>)entity;
+		
+		//erase messages
+		for(Variable v: env.getVariables())
+		{
+			if(v instanceof Human)
+				((Human)v).getEar().clear();
+			if(v instanceof Agent)
+				((Agent)v).getRadioMessage().clear();
+		}
+		
+		//send new messages
 		for(Variable v : env.getVariables())
 		{
 			Agent a = (Agent)v;
 			for(int k = 0; k < a.getVoice().size(); k++)
 			{
 				if(a.getVoice().get(k) instanceof TaskMessage){
-					a.getVoice().get(k).configureContent(env.findValueByID(a.getVoice().get(k).getContent(),(Class<? extends Value>) a.getVoice().get(k).getContentClass()));
+					FireBuildingTaskMessage msg = (FireBuildingTaskMessage) a.getVoice().get(k);
+					msg.configureContent(
+							(FireBuildingTask)env.findValueByID(a.getVoice().get(k).getContent(),(Class<? extends Value>) a.getVoice().get(k).getContentClass())
+							);
 				}
 				if(a.getVoice().get(k).getBroadCast())
 				{
@@ -113,6 +129,10 @@ public class CommunicationSimulation extends DefaultSimulation {
 	 */
 	private void broadcastVoiceMessage(Environment<Entity> env, Entity sender, Message  msg)
 	{
+		/**
+		 * TODO
+		 * voice messages must be sent to closest humans
+		 */
 		for(Variable v : env.getVariables())
 		{
 			if(v instanceof Human)
