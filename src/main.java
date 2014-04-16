@@ -29,6 +29,7 @@ import ufrgs.maslab.gsom.util.visualization.SelfOrganizingMapGraph3D;
 
 public class main {
 
+	
 	private static boolean randomAgent = false;
 	
 	private transient static ArrayList<Position> tmpList = new ArrayList<Position>();
