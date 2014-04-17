@@ -20,7 +20,7 @@ public class TaskMessage extends Message {
 	
 	public String toString(){
 		String s = super.toString(); 
-		s = "ID: "+this.getTaskId().toString()+" \n "
+		s += "ID: "+this.getTaskId().toString()+" \n "
 				+"X: "+this.getTaskX()+" \n "
 				+"Y: "+this.getTaskY()+" \n "
 				+"Value: "+this.getTaskValue()+" \n ";
