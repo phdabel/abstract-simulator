@@ -1,6 +1,7 @@
 package ufrgs.maslab.abstractsimulator.variables;
 
 import ufrgs.maslab.abstractsimulator.constants.MessageType;
+import ufrgs.maslab.abstractsimulator.core.Entity;
 import ufrgs.maslab.abstractsimulator.core.interfaces.Platoon;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
 import ufrgs.maslab.abstractsimulator.mailbox.message.FireBuildingTaskMessage;
@@ -74,7 +75,18 @@ public class FireFighter extends Human implements Platoon {
 	public void act(int time){
 		//if(time < 3)
 		//{
-			for(Integer t : this.getDomain().keySet())
+			for(Entity v : this.getDomain())
+			{
+				int idxV = this.getDomain().indexOf(v);
+				try {
+					this.sendRadioMessage(new FireBuildingTaskMessage(v.getId(), this.getDomain().get(idxV).getClass(), this, MessageType.RADIO));
+				} catch (SimulatorException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+			/*for(Integer t : this.getDomain().keySet())
 			{
 				try {
 					this.sendRadioMessage(new FireBuildingTaskMessage(t, this.getDomain().get(t), this, MessageType.RADIO));
@@ -82,7 +94,7 @@ public class FireFighter extends Human implements Platoon {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
+			}*/
 		//}
 		/*
 		System.out.println("I'm fire fighter "+this.getId()+" at time "+time);
