@@ -169,8 +169,8 @@ public class BlackBox {
 		if(this.getSimulation().isEmpty())
 			throw new SimulatorException(Transmitter.getProperty(this.exceptionFileName, "exception.no.simulator"));
 		while(this.time <= this.timesteps){
-			this.simulationStep();
 			this.time++;
+			this.simulationStep();
 		}
 
 		WriteFile.getInstance().closeFile();
@@ -191,6 +191,8 @@ public class BlackBox {
 			if(this.getSimulation().get(0) instanceof PerceptionSimulator)
 				this.getSimulation().get(0).simulate(var, this.getEnvironment());
 			
+			//update age of the agent
+			var.setTime(this.time);
 			//runs the act command for each agent
 			var.act(this.time);
 		}
