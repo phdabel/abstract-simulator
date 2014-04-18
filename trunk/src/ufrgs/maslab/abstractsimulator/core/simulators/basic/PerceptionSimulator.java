@@ -2,7 +2,6 @@ package ufrgs.maslab.abstractsimulator.core.simulators.basic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 import ufrgs.maslab.abstractsimulator.core.Entity;
 import ufrgs.maslab.abstractsimulator.core.Environment;
@@ -46,7 +45,8 @@ public class PerceptionSimulator extends DefaultSimulation {
 			ArrayList<Double> e1 = new ArrayList<Double>(
 				    Arrays.asList(var.getX(), var.getY()));
 			
-			HashMap<Integer, Class<? extends Entity>> domain = new HashMap<Integer, Class<? extends Entity>>();
+			ArrayList<Entity> domain = new ArrayList<Entity>();
+			//HashMap<Integer, Class<? extends Entity>> domain = new HashMap<Integer, Class<? extends Entity>>();
 			Double radius = Transmitter.getDoubleConfigParameter(this.configFile, "agent.radius");
 			for(Value val : env.getValues())
 			{
@@ -54,7 +54,8 @@ public class PerceptionSimulator extends DefaultSimulation {
 					    Arrays.asList(val.getX(), val.getY()));
 				
 				if(Utilities.euclideanDistance(e1, e2) <= radius)
-					domain.put(val.getId(),val.getClass());
+					domain.add(val);
+					//domain.put(val.getId(),val.getClass());
 				
 			}
 			env.findVariableByID(var.getId(), var.getClass()).getDomain().clear();

@@ -1,16 +1,20 @@
 package ufrgs.maslab.abstractsimulator.variables;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import javax.swing.JFrame;
+
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 
 import ufrgs.maslab.abstractsimulator.constants.MessageType;
+import ufrgs.maslab.abstractsimulator.core.Entity;
 import ufrgs.maslab.abstractsimulator.core.interfaces.Building;
 import ufrgs.maslab.abstractsimulator.disaster.DisasterSimulation;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
@@ -18,12 +22,15 @@ import ufrgs.maslab.abstractsimulator.mailbox.message.FireBuildingTaskMessage;
 import ufrgs.maslab.abstractsimulator.mailbox.message.Message;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
 import ufrgs.maslab.abstractsimulator.util.WriteFile;
+import ufrgs.maslab.abstractsimulator.values.FireBuildingTask;
 import ufrgs.maslab.abstractsimulator.values.Task;
 import ufrgs.maslab.gsom.learning.GSOMLearning;
 import ufrgs.maslab.gsom.network.GrowingSelfOrganizingMap;
 import ufrgs.maslab.gsom.norm.LogTransformation;
 import ufrgs.maslab.gsom.norm.Template;
 import ufrgs.maslab.gsom.norm.TemplateNormalizer;
+import ufrgs.maslab.gsom.util.visualization.GrowingSelfOrganizingMapGraph2D;
+import ufrgs.maslab.gsom.util.visualization.SelfOrganizingMapGraph3D;
 
 public class FireStation extends Agent implements Building{
 
@@ -66,6 +73,7 @@ public class FireStation extends Agent implements Building{
 			System.out.println();
 			//System.out.println(t.toString());
 		}
+		this.clusteringMain();
 	}
 	
 	@Override
@@ -81,60 +89,257 @@ public class FireStation extends Agent implements Building{
 	
 	private HashMap<Integer, FireBuildingTaskMessage> tasks = new HashMap<Integer, FireBuildingTaskMessage>();
 	
+	private final String FILELOG = "log_experiment_1";
+	
+	private final String FILEGSOM = "gsom_info";
+	
+	private GSOMLearning gsom = null;
+	
 	/**
 	 * main of the clustering phase
 	 */
 	public void clusteringMain(){
-		String fileLog = "log_experiment_1";
-		WriteFile.getInstance().openFile(fileLog);
+		WriteFile.getInstance().openFile(this.FILELOG);
 		
 		String header = "";
         header = "time;total tasks;generated tasks;solved tasks; unsolved tasks;agents";				
-		WriteFile.getInstance().write(header,fileLog);
+		WriteFile.getInstance().write(header,this.FILELOG);
 		//DisasterSimulation<Task, GSOMAgent<Task>> sim = new DisasterSimulation(Task.class, GSOMAgent.class, 4);
 		//int startTime = sim.getTime();
 		//int endTime = sim.getTimesteps();
 		//GSOMLearning gsom = gsomProcessing();
-		
 		
 		Map<Task,Double> map = new HashMap<Task,Double>();
 		ValueComparator doubleComparator = new ValueComparator(map);
 		SortedMap<Task,Double> sortedMap = new TreeMap<Task,Double>(doubleComparator);
 		DataSet training = new DataSet(9,1);
 		DataSet test = new DataSet(9,1);
+		if(this.getTime() == 1){
+			this.gsom = this.gsomTimestep(training, test);
+		}
 	}
 	
-	public void gsomTimestep(){
-		WriteFile.getInstance().openFile(fileLog);
+	/**
+	 * mounts data set and return the gsom
+	 * @param training
+	 * @param test
+	 */
+	public GSOMLearning gsomTimestep(DataSet training, DataSet test){
+		WriteFile.getInstance().openFile(this.FILELOG);
 		//sim.printTasks(fileLog);
-		String fileGsom = "gsom_info";
-		WriteFile.getInstance().openFile(fileGsom);
-		String header2 = "time;ID;Temperature;Matter;Floors;AreaGround;TotalArea;a_x;a_y;n_x;n_y";
-		WriteFile.getInstance().write(header2,fileGsom);
+		//WriteFile.getInstance().openFile(this.FILEGSOM);
+		//String header2 = "time;ID;Temperature;Matter;Floors;AreaGround;TotalArea;a_x;a_y;n_x;n_y";
+		//WriteFile.getInstance().write(header2,this.FILEGSOM);
 		
-		Map<Task, DataSetRow> m = mountDataSet(this.getDomain());
+		Map<Task, DataSetRow> m = this.mountDataSet(this.getDomain());
+		GSOMLearning gsom = null;
+		if(this.getTime() == 1)
+		{
+			gsom = this.trainGSOM(m, training, test);
+			
+		}
+		
+		/*for(Task t : sim.getEnvironment().getTasks())
+		{
+			String task = startTime+";"+t.getId() + ";"+ t.getTemperature() + ";" + t.getMatter() + ";" + t.getFloors() + ";" + t.getAreaGround()
+					+ ";" + t.getTotalArea() + ";" + t.getX() + ";" + t.getY() + ";" 
+					+ gsom.getNeuralNetwork().getStructure().getWinner().getAxisPosition().get(0) + ";" 
+					+ gsom.getNeuralNetwork().getStructure().getWinner().getAxisPosition().get(1);
+			WriteFile.getInstance().write(task,fileGsom);
+			
+		}*/
+		return gsom;
 		
 	}
 	
-	public static Map<Task, DataSetRow> mountDataSet(ArrayList<Task> tasks, Template template)
+	/**
+	 * mounts initialization, training and testing datasets
+	 * generates the GSOM
+	 * 
+	 * @param map
+	 * @param training
+	 * @param test
+	 * @return
+	 */
+	private GSOMLearning trainGSOM(Map<Task, DataSetRow> map, DataSet training, DataSet test)
+	{
+		
+		DataSet initSet = new DataSet(9,1);
+		for(int i = 0; i < 50; i++)
+		{
+			DataSetRow d = new DataSetRow(FireBuildingTask.randomTask(), new double[]{0});
+			initSet.addRow(d);
+		}
+		
+		initSet.normalize(new LogTransformation());
+	    
+		ArrayList<Integer> dim = new ArrayList<Integer>();
+		dim.add(2);
+        dim.add(2);
+        GrowingSelfOrganizingMap gsom = new GrowingSelfOrganizingMap(initSet,dim);
+        GSOMLearning learning = new GSOMLearning(gsom);
+        
+        learning.getNeuralNetwork().getStructure().setInitializationDataSet(initSet);
+        learning.initialize();
+		
+		/**
+		 *  os dados das tarefas foram recebidos atraves
+		 *  do metodo mountDataSet
+		 *  esses dados sao inseridos em um training DataSet
+		 */
+		for(DataSetRow row : map.values())
+		{
+			training.addRow(row);
+		}
+		training.normalize(new LogTransformation());
+		/**
+		 * monta um conjunto de testes/validacao
+		 * com tarefas aleatorias
+		 */
+		for(int k = 0; k < 100; k++)
+		{
+			DataSetRow d = new DataSetRow(FireBuildingTask.randomTask(), new double[]{0});
+			test.addRow(d);
+		}
+		test.normalize(new LogTransformation());
+		
+		learning.getNeuralNetwork().getStructure().setInput(test);
+		learning.getNeuralNetwork().getStructure().setTest(training);
+		//growing phase
+		learning.learn();
+		//smoothing phase
+		learning.testingMode();
+		/**
+		 * limpa a rede
+		 * retira nós dummy
+		 */
+		//learning.getNeuralNetwork().getStructure().cleanNetwork();
+		
+		//learning.getNeuralNetwork().buildSkeleton();
+		Template template = new Template();
+		template.setAttributes(new String[]{"apartments per floor", "hp", "floors", "ground area", "matter", "success", "x", "y", "temperature"});
+        learning.getNeuralNetwork().creatingLabels(template);
+        show2DMap(learning.getNeuralNetwork());
+		//show3DMap(learning.getNeuralNetwork());
+		
+		
+		return learning;
+	}
+	
+	/**
+	 * receives a array list of tasks and returns an assembled dataset
+	 * 
+	 * @param tasks
+	 * @return
+	 */
+	private Map<Task, DataSetRow> mountDataSet(ArrayList<Entity> tasks)
 	{
 		Map<Task, DataSetRow> m = new HashMap<Task, DataSetRow>();
-		DataSet ds = new DataSet(8,1);
-		for(Task t : tasks)
+		DataSet ds = new DataSet(9,1);
+		for(Entity e: tasks)
 		{
-			DataSetRow d = task(t);
-			ds.addRow(d);
+			if(e instanceof Task)
+			{
+				Task t = (Task)e;
+				DataSetRow d = this.task(t);
+				ds.addRow(d);
+			}
 		}
-		ds.normalize(new TemplateNormalizer(template));
+		ds.normalize(new LogTransformation());
 		for(int i = 0; i < tasks.size(); i++)
 		{
-			m.put(tasks.get(i), ds.getRowAt(i));
+			if(tasks.get(i) instanceof Task)
+				m.put((Task)tasks.get(i), ds.getRowAt(i));
 		}
 		
 		return m;
 		
 	}
+	
+	/**
+	 * receives a task and returns a datasetrow to the neuralnetwork
+	 * 
+	 * @param t Task which was received
+	 * @return
+	 */
+	private DataSetRow task(Task t)
+	{
+		double[] d = new double[9];
+		Arrays.fill(d,0.0);
+		DataSetRow task = null;
+		if(t instanceof FireBuildingTask)
+		{
+			d = this.fireBuildingTask((FireBuildingTask)t);
+			task = new DataSetRow(d, new double[]{0});
+
+		}
 		
+		return task;
+	}
+	
+	/**
+	 * transforms a FireBuildingTask into a double vector
+	 * 
+	 * @param t
+	 * @return
+	 */
+	private double[] fireBuildingTask(FireBuildingTask t)
+	{
+		double d[] = new double[9];
+
+		int apartmentsPerFloor = t.getApartmentsPerFloor();
+		int buildingHP = t.getBuildingHP();
+		int floors = t.getFloors();
+		int groundArea = t.getGroundArea();
+		int matter = t.getMatter().getValue();
+		double success = t.getValue();
+		double x = t.getX();
+		double y = t.getY();
+		int temperature = t.getTemperature().getValue();
+		
+		d[0] = apartmentsPerFloor;
+		d[1] = buildingHP;
+		d[2] = floors;
+		d[3] = groundArea;
+		d[4] = matter;
+		d[5] = success;
+		d[6] = x;
+		d[7] = y;
+		d[8] = temperature;
+		
+		return d;
+		
+	}
+	
+	public static void show2DMap(GrowingSelfOrganizingMap gsom)
+	{
+	    /** GSOM 2D */
+		GrowingSelfOrganizingMapGraph2D and = new GrowingSelfOrganizingMapGraph2D(gsom.getStructure());
+		        
+		        
+        JFrame frame = new JFrame();
+    	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	frame.getContentPane().add(and);
+    	
+    	and.init();
+    	and.start();
+    	frame.pack();
+    	frame.setVisible(true);
+		    
+	}
+	
+	public static void show3DMap(GrowingSelfOrganizingMap gsom)
+	{
+		SelfOrganizingMapGraph3D gsomMap = new SelfOrganizingMapGraph3D(gsom.getStructure());
+        JFrame f = new JFrame();
+		f.add(gsomMap);
+		f.setSize(1024,768);
+		
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setVisible(true);
+		
+	}
+	
 	/**
 	 * internal class to comparate values and to provide ordering of tasks
 	 * @author abel
@@ -157,5 +362,4 @@ public class FireStation extends Agent implements Building{
 	    }
 	}
 	
-
 }

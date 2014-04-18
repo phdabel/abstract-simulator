@@ -1,5 +1,8 @@
 package ufrgs.maslab.abstractsimulator.values;
 
+import java.util.Arrays;
+import java.util.Random;
+
 import ufrgs.maslab.abstractsimulator.constants.Damage;
 import ufrgs.maslab.abstractsimulator.constants.Matter;
 import ufrgs.maslab.abstractsimulator.constants.Temperature;
@@ -209,6 +212,75 @@ public class FireBuildingTask extends Task {
 	
 	public void header(){
 		FireBuildingTaskLogger.saveHeader();
+	}
+	
+	/**
+	 * generates random task values
+	 * @return
+	 */
+	public static double[] randomTask(){
+		double[] randomTask = new double[9];
+		Arrays.fill(randomTask, 0d);
+		Random r = new Random();
+		
+		int apartmentsPerFloor = 0;
+		int buildingHP = 0;
+		int floors = 0;
+		int groundArea = 0;
+		double success = 0;
+		
+		double x = r.nextDouble();
+		double y = r.nextDouble();
+		int matter = Matter.randomMatter().getValue();
+		int temperature = Temperature.randomTemperature().getValue();
+		if(matter == Matter.WOODEN_HOUSE.getValue())
+		{
+			floors = (1 + r.nextInt(2));
+			groundArea = 50;
+		}else if(matter == Matter.REINFORCED_CONCRETE.getValue()){
+			floors = (1 + r.nextInt(5));
+			groundArea = (50 + r.nextInt(Transmitter.getIntConfigParameter("config.properties", "maximum.groundArea")));
+		}else{
+			floors = (1 + r.nextInt(Transmitter.getIntConfigParameter("config.properties", "maximum.floors")));
+			groundArea = (50 + r.nextInt(Transmitter.getIntConfigParameter("config.properties", "maximum.groundArea")));
+		}
+		
+		apartmentsPerFloor = (int)(groundArea / 50);
+		
+		switch(temperature)
+		{
+		
+			case 1:
+				success = 5;
+				break;
+			case 2:
+				success = ((int)(groundArea / 10));
+				break;
+			case 3:
+				success = (apartmentsPerFloor * (int)(groundArea / 10));
+				break;
+			case 4:
+				success = (24+(apartmentsPerFloor * (int)(groundArea / 10)));
+				break;
+			default:
+				success = 0;
+				break;
+			
+		}
+		
+		buildingHP = floors * apartmentsPerFloor + (10 ^ matter);
+		
+		randomTask[0] = apartmentsPerFloor;
+		randomTask[1] = buildingHP;
+		randomTask[2] = floors;
+		randomTask[3] = groundArea;
+		randomTask[4] = matter;
+		randomTask[5] = success;
+		randomTask[6] = x;
+		randomTask[7] = y;
+		randomTask[8] = temperature;
+		
+		return randomTask;
 	}
 	
 	
