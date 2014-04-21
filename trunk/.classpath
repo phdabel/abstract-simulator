@@ -5,10 +5,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/GrowingSelfOrganizingMap"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jgrapht-0.8.3"/>
 	<classpathentry kind="lib" path="lib/neuroph-core-2.8.jar"/>
-	<classpathentry kind="lib" path="/usr/local/java/jdk1.7.0_45/jre/lib/ext/vecmath-1.5.2.jar"/>
-	<classpathentry kind="lib" path="/usr/local/java/jdk1.7.0_45/jre/lib/ext/j3dutils-1.5.2+dfsg.jar"/>
-	<classpathentry kind="lib" path="/usr/local/java/jdk1.7.0_45/jre/lib/ext/j3dutils.jar"/>
-	<classpathentry kind="lib" path="/usr/local/java/jdk1.7.0_45/jre/lib/ext/j3dcore-1.5.2+dfsg.jar"/>
-	<classpathentry kind="lib" path="/usr/local/java/jdk1.7.0_45/jre/lib/ext/j3dcore.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/java3D"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

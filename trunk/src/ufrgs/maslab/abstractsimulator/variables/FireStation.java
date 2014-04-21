@@ -26,7 +26,6 @@ import ufrgs.maslab.abstractsimulator.values.FireBuildingTask;
 import ufrgs.maslab.abstractsimulator.values.Task;
 import ufrgs.maslab.gsom.learning.GSOMLearning;
 import ufrgs.maslab.gsom.network.GrowingSelfOrganizingMap;
-import ufrgs.maslab.gsom.norm.LogTransformation;
 import ufrgs.maslab.gsom.norm.Template;
 import ufrgs.maslab.gsom.norm.TemplateNormalizer;
 import ufrgs.maslab.gsom.util.visualization.GrowingSelfOrganizingMapGraph2D;
@@ -95,6 +94,8 @@ public class FireStation extends Agent implements Building{
 	
 	private GSOMLearning gsom = null;
 	
+	private Template templateFireTask = null;
+	
 	/**
 	 * main of the clustering phase
 	 */
@@ -108,6 +109,10 @@ public class FireStation extends Agent implements Building{
 		//int startTime = sim.getTime();
 		//int endTime = sim.getTimesteps();
 		//GSOMLearning gsom = gsomProcessing();
+		
+		Template template = new Template(new double[]{1d,2d,1d,50d,0d,5d,0d,0d,1d}, new double[]{4d, 220d, 30d, 230d, 2d, 116d, 1d, 1d, 4d});
+		template.setAttributes(new String[]{"apartments per floor", "hp", "floors", "ground area", "matter", "success", "x", "y", "temperature"});
+		this.templateFireTask = template;
 		
 		Map<Task,Double> map = new HashMap<Task,Double>();
 		ValueComparator doubleComparator = new ValueComparator(map);
@@ -125,7 +130,7 @@ public class FireStation extends Agent implements Building{
 	 * @param test
 	 */
 	public GSOMLearning gsomTimestep(DataSet training, DataSet test){
-		WriteFile.getInstance().openFile(this.FILELOG);
+		//WriteFile.getInstance().openFile(this.FILELOG);
 		//sim.printTasks(fileLog);
 		//WriteFile.getInstance().openFile(this.FILEGSOM);
 		//String header2 = "time;ID;Temperature;Matter;Floors;AreaGround;TotalArea;a_x;a_y;n_x;n_y";
@@ -165,13 +170,13 @@ public class FireStation extends Agent implements Building{
 	{
 		
 		DataSet initSet = new DataSet(9,1);
-		for(int i = 0; i < 50; i++)
+		for(int i = 0; i < 10; i++)
 		{
 			DataSetRow d = new DataSetRow(FireBuildingTask.randomTask(), new double[]{0});
 			initSet.addRow(d);
 		}
 		
-		initSet.normalize(new LogTransformation());
+		initSet.normalize(new TemplateNormalizer(this.templateFireTask));
 	    
 		ArrayList<Integer> dim = new ArrayList<Integer>();
 		dim.add(2);
@@ -182,29 +187,30 @@ public class FireStation extends Agent implements Building{
         learning.getNeuralNetwork().getStructure().setInitializationDataSet(initSet);
         learning.initialize();
 		
+        /**
+		 * monta um conjunto de treino
+		 * com tarefas aleatorias
+		 */
+        for(int k = 0; k < 50; k++)
+		{
+			DataSetRow d = new DataSetRow(FireBuildingTask.randomTask(), new double[]{0});
+			training.addRow(d);
+		}
+		training.normalize(new TemplateNormalizer(this.templateFireTask));
+		
 		/**
 		 *  os dados das tarefas foram recebidos atraves
 		 *  do metodo mountDataSet
-		 *  esses dados sao inseridos em um training DataSet
+		 *  esses dados sao inseridos em um test DataSet
 		 */
 		for(DataSetRow row : map.values())
 		{
-			training.addRow(row);
+			test.addRow(row);
 		}
-		training.normalize(new LogTransformation());
-		/**
-		 * monta um conjunto de testes/validacao
-		 * com tarefas aleatorias
-		 */
-		for(int k = 0; k < 100; k++)
-		{
-			DataSetRow d = new DataSetRow(FireBuildingTask.randomTask(), new double[]{0});
-			test.addRow(d);
-		}
-		test.normalize(new LogTransformation());
+		test.normalize(new TemplateNormalizer(this.templateFireTask));
 		
-		learning.getNeuralNetwork().getStructure().setInput(test);
-		learning.getNeuralNetwork().getStructure().setTest(training);
+		learning.getNeuralNetwork().getStructure().setInput(training);
+		learning.getNeuralNetwork().getStructure().setTest(test);
 		//growing phase
 		learning.learn();
 		//smoothing phase
@@ -216,11 +222,10 @@ public class FireStation extends Agent implements Building{
 		//learning.getNeuralNetwork().getStructure().cleanNetwork();
 		
 		//learning.getNeuralNetwork().buildSkeleton();
-		Template template = new Template();
-		template.setAttributes(new String[]{"apartments per floor", "hp", "floors", "ground area", "matter", "success", "x", "y", "temperature"});
-        learning.getNeuralNetwork().creatingLabels(template);
-        show2DMap(learning.getNeuralNetwork());
-		//show3DMap(learning.getNeuralNetwork());
+		
+        learning.getNeuralNetwork().creatingLabels(this.templateFireTask);
+        //show2DMap(learning.getNeuralNetwork());
+		show3DMap(learning.getNeuralNetwork());
 		
 		
 		return learning;
@@ -245,7 +250,7 @@ public class FireStation extends Agent implements Building{
 				ds.addRow(d);
 			}
 		}
-		ds.normalize(new LogTransformation());
+		ds.normalize(new TemplateNormalizer(this.templateFireTask));
 		for(int i = 0; i < tasks.size(); i++)
 		{
 			if(tasks.get(i) instanceof Task)
