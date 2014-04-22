@@ -49,17 +49,32 @@ public class Calculations
      */
     public static double distance(Point sourcePoint, Point destPoint, int m)
     {
-        long dx = (long) Math.abs(destPoint.getX() - sourcePoint.getX());
-        long dy = (long) Math.abs(destPoint.getY() - sourcePoint.getY());
-
+        //long dx = (long) Math.abs(destPoint.getX() - sourcePoint.getX());
+        //long dy = (long) Math.abs(destPoint.getY() - sourcePoint.getY());
+        double res = 0d;
         switch (m) {
             case DISTANCE_EUCLIDIAN_SQ:
+            	for(int k = 0; k < sourcePoint.getAttributes().size(); k++)
+            	{
+            		res += Math.pow((sourcePoint.getAttributes().get(k) - destPoint.getAttributes().get(k)),2);
+            	}
+            	return res;
                 //System.out.println("dx: " + dx + " dy: " + dy + " dist: " + (dx*dx + dy*dy));
-                return (double) (dx*dx + dy*dy);
+                //return (double) (dx*dx + dy*dy);
             case DISTANCE_MANHATTAN:
-                return (double) (dx + dy);
+            	for(int k = 0; k < sourcePoint.getAttributes().size(); k++)
+            	{
+            		res += (sourcePoint.getAttributes().get(k) - destPoint.getAttributes().get(k));
+            	}
+            	return res;
+                //return (double) (dx + dy);
             default:
-                return Math.pow(Math.pow(dx, m) + Math.pow(dy, m), 1.0/m);
+            	for(int k = 0; k < sourcePoint.getAttributes().size(); k++)
+            	{
+            		res += Math.pow((sourcePoint.getAttributes().get(k) - destPoint.getAttributes().get(k)), m);
+            	}
+            	return Math.pow(res, m); 
+                //return Math.pow(Math.pow(dx, m) + Math.pow(dy, m), 1.0/m);
         }
     }
 }

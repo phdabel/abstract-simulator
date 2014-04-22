@@ -98,9 +98,10 @@ class AlgorithmPoint implements Comparable<AlgorithmPoint>
      */
     public long getKey()
     {
-        long key = (long) point.getX();
+		long key = (long) point.getX();
         key = key << 32;
         key += (long) point.getY();
         return key;
+    	
     }
 }
