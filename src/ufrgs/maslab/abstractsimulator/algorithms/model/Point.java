@@ -1,23 +1,15 @@
 package ufrgs.maslab.abstractsimulator.algorithms.model;
 
-import ufrgs.maslab.gsom.util.Position;
+import java.util.ArrayList;
+
 
 public class Point
 {
-
+	
     int x;
     int y;
     int c; // cluster number
-    
-    public Point(Position point, int c)
-    {
-    	if(point.getAxisPosition().size() == 2)
-    	{
-    		this.x = point.getAxisPosition().get(0);
-    		this.y = point.getAxisPosition().get(1);
-    		this.c = c;
-    	}
-    }
+    private ArrayList<Double> attributes = new ArrayList<Double>();
 
     public Point(int x, int y, int c)
     {
@@ -45,4 +37,12 @@ public class Point
     {
         this.c = c;
     }
+
+	public ArrayList<Double> getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(ArrayList<Double> attributes) {
+		this.attributes = attributes;
+	}
 }

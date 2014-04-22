@@ -24,24 +24,25 @@ public class Field
 
     public void addPoint(Point p)
     {
-        if (hasPoint(p.getX(), p.getY())) {
-            return;
-        }
-        points.put(getKey(p.getX(), p.getY()), p);
-
-        if (p.getX() < min_x) {
-            min_x = p.getX();
-        }
-        if (p.getX() > max_x) {
-            max_x = p.getX();
-        }
-
-        if (p.getY() < min_y) {
-            min_y = p.getY();
-        }
-        if (p.getY() > max_y) {
-            max_y = p.getY();
-        }
+	        if (hasPoint(p.getX(), p.getY())) {
+	            return;
+	        }
+	        points.put(getKey(p.getX(), p.getY()), p);
+	
+	        if (p.getX() < min_x) {
+	            min_x = p.getY();
+	        }
+	        if (p.getX() > max_x) {
+	            max_x = p.getX();
+	        }
+	
+	        if (p.getY() < min_y) {
+	            min_y = p.getY();
+	        }
+	        if (p.getY() > max_y) {
+	            max_y = p.getY();
+	        }
+    	
     }
 
     public int size()
