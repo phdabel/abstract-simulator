@@ -14,7 +14,6 @@ import javax.swing.JFrame;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 
-import ufrgs.maslab.abstractsimulator.disaster.DisasterSimulation;
 import ufrgs.maslab.abstractsimulator.myagents.GSOMAgent;
 import ufrgs.maslab.abstractsimulator.util.WriteFile;
 import ufrgs.maslab.abstractsimulator.values.Task;
@@ -40,12 +39,11 @@ public class main {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void main(String[] args) {
+		/*
+		//Task[] tArray = new Task[sim.getEnvironment().getTasks().size()];
+		//tArray = sim.getEnvironment().getTasks().toArray(tArray);
+		//MergeSort.mergeSort(tArray,true);
 		
-		/**
-		 * Task[] tArray = new Task[sim.getEnvironment().getTasks().size()];
-		   tArray = sim.getEnvironment().getTasks().toArray(tArray);
-		   MergeSort.mergeSort(tArray,true);
-		 */
 		template.setAttributes(new String[]{"temperature","wood","steel","concrete","floors","areaGround","x","y"});
 		String fileLog = "log_experiment_1";
 		WriteFile.getInstance().openFile(fileLog);
@@ -77,27 +75,21 @@ public class main {
 			
 			Map<Task, DataSetRow> m = mountDataSet(sim.getEnvironment().getTasks(),template);
 			
-			/*
-			 * treino online
-			 */
+			//treino online
 			if(!randomAgent){
 				if(startTime == 1){
 					
-					/**
-					 *  os dados das tarefas foram recebidos atraves
-					 *  do metodo mountDataSet
-					 *  esses dados sao inseridos em um training DataSet
-					 */
+					//os dados das tarefas foram recebidos atraves
+					//do metodo mountDataSet
+					//esses dados sao inseridos em um training DataSet
 					for(DataSetRow row : m.values())
 					{
 						training.addRow(row);
 					}
 					// dados sao normalizados conforme template
 					training.normalize(new TemplateNormalizer(template));
-					/**
-					 * monta um conjunto de testes/validacao
-					 * com tarefas aleatorias
-					 */
+					//monta um conjunto de testes/validacao
+					//com tarefas aleatorias
 					for(int k = 0; k < 100; k++)
 					{
 						test.addRow(randomTask());
@@ -111,14 +103,11 @@ public class main {
 					gsom.learn();
 					//smoothing phase
 					gsom.testingMode();
-					/**
-					 * limpa a rede
-					 * retira nós dummy
-					 */
+					//limpa a rede
+					//retira nós dummy
+					
 					gsom.getNeuralNetwork().getStructure().cleanNetwork();
-			        /**
-			         * monta data skeleton model
-			         */
+			        //monta data skeleton model
 					gsom.getNeuralNetwork().buildSkeleton();
 			        gsom.getNeuralNetwork().creatingLabels();
 			        show2DMap(gsom.getNeuralNetwork());
@@ -143,13 +132,13 @@ public class main {
 						clusterOfTasks.get(map.get(t)).add(t);
 						
 					}
-					/*
-					System.out.println("size clusters "+clusterOfTasks.size());
 					
-					for(Double d : clusterOfTasks.keySet())
-					{
-						System.out.println("double "+d+" tasks "+clusterOfTasks.get(d).size());
-					}*/
+					//System.out.println("size clusters "+clusterOfTasks.size());
+					
+					//for(Double d : clusterOfTasks.keySet())
+					//{
+					//	System.out.println("double "+d+" tasks "+clusterOfTasks.get(d).size());
+					//}
 
 					int ct = 0;
 					int idC = 0;
@@ -190,36 +179,35 @@ public class main {
 						}
 						coleagues.clear();
 					}
-					/*
-					Double rVal;
-					for(GSOMAgent a : sim.getEnvironment().getAgents())
-					{
-						rVal = clusterPriority.get(idC)/sum;
-						Double agentRatio = Math.abs(rVal * totalAg);
-						if(ct < agentRatio)
-						{
-							coleagues.add(a);
-							a.setDomain(clusterOfTasks.get(clusterPriority.get(idC)));
-							ct++;
-						}else
-						{
-							coleagues.add(a);
-							a.setDomain(clusterOfTasks.get(clusterPriority.get(idC)));
-							a.agents = coleagues;
-							for(Object c : a.agents)
-							{
-								GSOMAgent tmpAgent = (GSOMAgent)c;
-								//System.out.println("ratio "+agentRatio+" leader "+a.getId()+" tmpAgent "+tmpAgent.getId());
-								sim.getEnvironment().getAgents().get(tmpAgent.getId()).agents = a.agents;
-								
-							}
-							a.leader = true;
-							coleagues.clear();
-							ct = 0;
-							idC++;
-						}
-					}
-					*/
+					
+					//Double rVal;
+					//for(GSOMAgent a : sim.getEnvironment().getAgents())
+					//{
+					//	rVal = clusterPriority.get(idC)/sum;
+					//	Double agentRatio = Math.abs(rVal * totalAg);
+					//	if(ct < agentRatio)
+					//	{
+					//		coleagues.add(a);
+					//		a.setDomain(clusterOfTasks.get(clusterPriority.get(idC)));
+					//		ct++;
+					//	}else
+					//	{
+					//		coleagues.add(a);
+					//		a.setDomain(clusterOfTasks.get(clusterPriority.get(idC)));
+					//		a.agents = coleagues;
+					//		for(Object c : a.agents)
+					//		{
+					//			GSOMAgent tmpAgent = (GSOMAgent)c;
+					//			//System.out.println("ratio "+agentRatio+" leader "+a.getId()+" tmpAgent "+tmpAgent.getId());
+					//			sim.getEnvironment().getAgents().get(tmpAgent.getId()).agents = a.agents;
+					//			
+					//		}
+					//		a.leader = true;
+					//		coleagues.clear();
+					//		ct = 0;
+					//		idC++;
+					//	}
+					//}
 					
 					map.clear();
 					sortedMap.clear();
@@ -247,7 +235,7 @@ public class main {
 		//System.out.println(Math.log(20));
 		WriteFile.getInstance().closeFile();
 		System.out.println("Simulation Ended!");
-		
+		*/
 	}
 	
 	public static Map<Task, DataSetRow> mountDataSet(ArrayList<Task> tasks, Template template)
@@ -312,6 +300,7 @@ public class main {
 	
 	public static GSOMLearning gsomProcessing(Template template)
 	{		
+		/*
 		DataSet initSet = new DataSet(8,1);
 		for(int i = 0; i < 50; i++)
 		{
@@ -330,10 +319,10 @@ public class main {
         GSOMLearning learning = new GSOMLearning(gsom);
         learning.getNeuralNetwork().getStructure().setInitializationDataSet(initSet);
         learning.initialize();
-        /*
-        learning.weightFeature1 = featureImportance1;
-        learning.weightFeature2 = featureImportance2;
-        */
+        
+        //learning.weightFeature1 = featureImportance1;
+        //learning.weightFeature2 = featureImportance2;
+        
         
         //learning.learn();
         //gsom.getStructure().cleanNetwork();
@@ -342,7 +331,8 @@ public class main {
     
     	
     	return learning;
-		
+		*/
+		return null;
 	}
 	
 	public static Double euclidianDistance(Position p1, Position p2)
@@ -386,6 +376,7 @@ public class main {
 	
 	public static DataSetRow task(Task t)
 	{
+		/*
 		double[] d = new double[8];
 		Arrays.fill(d,0.0);
 		int temperature = t.getTemperature();
@@ -404,7 +395,8 @@ public class main {
 		d[7] = t.getY();
 		DataSetRow task = new DataSetRow(d, new double[]{0});
 		return task;
-		
+		*/
+		return null;
 	}
 	
 	public static DataSetRow randomTask()

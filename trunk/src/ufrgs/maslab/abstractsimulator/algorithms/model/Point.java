@@ -11,6 +11,14 @@ public class Point
     int c; // cluster number
     private ArrayList<Double> attributes = new ArrayList<Double>();
 
+    public Point(int x, int y, int c, ArrayList<Double> attributes)
+    {
+    	this.setAttributes(attributes);
+    	this.x = x;
+    	this.y = y;
+    	this.c = c;
+    }
+    
     public Point(int x, int y, int c)
     {
         this.x = x;
@@ -18,7 +26,7 @@ public class Point
         this.c = c;
     }
 
-    public int getX()
+	public int getX()
     {
         return x;
     }
