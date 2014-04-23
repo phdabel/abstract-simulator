@@ -13,10 +13,11 @@ import javax.swing.JFrame;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 
+import ufrgs.maslab.abstractsimulator.algorithms.model.Field;
+import ufrgs.maslab.abstractsimulator.algorithms.model.Point;
 import ufrgs.maslab.abstractsimulator.constants.MessageType;
 import ufrgs.maslab.abstractsimulator.core.Entity;
 import ufrgs.maslab.abstractsimulator.core.interfaces.Building;
-import ufrgs.maslab.abstractsimulator.disaster.DisasterSimulation;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
 import ufrgs.maslab.abstractsimulator.mailbox.message.FireBuildingTaskMessage;
 import ufrgs.maslab.abstractsimulator.mailbox.message.Message;
@@ -26,8 +27,10 @@ import ufrgs.maslab.abstractsimulator.values.FireBuildingTask;
 import ufrgs.maslab.abstractsimulator.values.Task;
 import ufrgs.maslab.gsom.learning.GSOMLearning;
 import ufrgs.maslab.gsom.network.GrowingSelfOrganizingMap;
+import ufrgs.maslab.gsom.neuron.Neuron;
 import ufrgs.maslab.gsom.norm.Template;
 import ufrgs.maslab.gsom.norm.TemplateNormalizer;
+import ufrgs.maslab.gsom.util.Position;
 import ufrgs.maslab.gsom.util.visualization.GrowingSelfOrganizingMapGraph2D;
 import ufrgs.maslab.gsom.util.visualization.SelfOrganizingMapGraph3D;
 
@@ -73,6 +76,29 @@ public class FireStation extends Agent implements Building{
 			//System.out.println(t.toString());
 		}
 		this.clusteringMain();
+		
+		for(Position p : this.gsom.getNeuralNetwork().getStructure().keySet())
+		{
+			Neuron n  = this.gsom.getNeuralNetwork().getStructure().get(p);
+			System.out.println("neuron "+n.getPosition().getAxisPosition());
+			for(int k = 0; k < n.getWeights().length; k++)
+			{
+				
+				System.out.println("weight "+(k+1)+" - "+n.getWeights()[k]);
+			}
+		}
+	}
+	
+	public Field neuronToPoint(Position p, Neuron n)
+	{
+		Field f = null;
+		ArrayList<Double> attributes = new ArrayList<Double>();
+		for(int k = 0; k < n.getWeights().length; k++)
+		{
+			attributes.add(n.getWeights()[k]);
+		}
+		f.addPoint(new Point(p.getAxisPosition().get(0), p.getAxisPosition().get(1), 0, attributes));		
+		return f;
 	}
 	
 	@Override

@@ -41,6 +41,7 @@ public class DifferenceRewardAgent<T extends Task> extends Agent{
 	 */
 	public void act(int time)
 	{
+		/*
 		if(time == 1){
 			Random r = new Random();
 			if(!this.getDomain().isEmpty()){
@@ -57,18 +58,17 @@ public class DifferenceRewardAgent<T extends Task> extends Agent{
 				//System.out.println("ag "+this.getId()+" chosen task "+t.getId()+" temperature "+t.getTemperature()+" matter "+t.getMatter()+" floors "+t.getFloors()+" ground "+t.getAreaGround()+" inc "+t.increaseTemperature+" dec "+t.decreaseTemperature+" mod "+t.modifier);
 				this.assign(t);
 			}
-		}
+		}*/
 	}
 	
 	/**
 	 *  sense environment modification after actions of all agents
 	 */
-	@Override
 	public void sense(int time){
-		
+		/*
 		Double r = getDifferenceReward();
 		computeUtility(getValue(), r);
-			
+		 */
 	}
 	
 	/**
@@ -140,10 +140,11 @@ public class DifferenceRewardAgent<T extends Task> extends Agent{
 	 */
 	public T getAction()
 	{
+		
 		T chosenTask = null;
 		/**
-		 *  empty set of probabilities
-		 */
+		//empty set of probabilities
+		 
 		if(this.actionProbability.isEmpty())
 		{
 			for(T t : this.getDomain())
@@ -152,9 +153,7 @@ public class DifferenceRewardAgent<T extends Task> extends Agent{
 				this.actionProbability.put(t, this.computeProbability(t));
 			}
 		}
-		/**
-		 *  environment tasks set different of action probability set
-		 */
+		//environment tasks set different of action probability set
 		else if( (this.getDomain().size() != this.actionProbability.size()) && !this.actionProbability.isEmpty())
 		{
 			ArrayList<T> removeList = new ArrayList<T>();
@@ -174,22 +173,20 @@ public class DifferenceRewardAgent<T extends Task> extends Agent{
 				this.actionProbability.remove(t);
 			}
 		}
-		/**
-		 * return max probability action
-		 */
+		//return max probability action
 		Double maxValue = Double.MIN_VALUE;
 		for(T ct : this.actionProbability.keySet())
 		{
-			/*System.out.print("ag "+this.getId());
-			System.out.print(" task "+ct.getId());
-			System.out.print(" utility "+this.actionUtility.get(ct));
-			System.out.println(" prob "+this.actionProbability.get(ct));*/
+			//System.out.print("ag "+this.getId());
+			//System.out.print(" task "+ct.getId());
+			//System.out.print(" utility "+this.actionUtility.get(ct));
+			//System.out.println(" prob "+this.actionProbability.get(ct));
 			if(this.actionProbability.get(ct) >= maxValue)
 			{
 				maxValue = this.actionProbability.get(ct);
 				chosenTask = ct;
 			}
-		}
+		}*/
 		return chosenTask;
 		
 	}
