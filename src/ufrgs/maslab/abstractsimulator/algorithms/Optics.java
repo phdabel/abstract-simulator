@@ -14,9 +14,12 @@ public class Optics extends Algorithm
 {
 
    // maximum epsilon
-   public final static double MAX_EPSILON_NEIGHBOURHOOD = 700;
-   public final static double IDEAL_EPSILON_NEIGHBOURHOOD = 300;
+   public final static double MAX_EPSILON_NEIGHBOURHOOD = 0.7;
+   public final static double IDEAL_EPSILON_NEIGHBOURHOOD = 0.3;
 
+
+   
+   public Integer attributeSize = null;
    /**
     * Seeds queue.
     *
@@ -107,10 +110,13 @@ public class Optics extends Algorithm
        for (Point p : field.getAllPoints()) {
            AlgorithmPoint op = new AlgorithmPoint(p);
            data.add(op);
+           if(this.attributeSize == null)
+        	   this.attributeSize = p.getAttributes().size();
        }
 
-       data.addAll(createNoise());
-
+       System.out.println("create noise");
+       //data.addAll(createNoise(this.attributeSize));
+       System.out.println("after create noise");
        // determine the dimensions of the data field
 
        int size = (int) height;
