@@ -21,6 +21,14 @@ public class Field
         max_y = 0;
         points = new TreeMap<Long,Point>();
     }
+    
+    public Point getRandomPoint(){
+    	Random random = new Random();
+    	List<Long> keys = new ArrayList<Long>(this.points.keySet());
+    	Long randomKey = keys.get(random.nextInt(keys.size()));
+    	
+    	return this.points.get(randomKey);
+    }
 
     public void addPoint(Point p)
     {

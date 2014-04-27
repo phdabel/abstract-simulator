@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.Set;
 
 import ufrgs.maslab.abstractsimulator.algorithms.model.*;
+import ufrgs.maslab.abstractsimulator.util.WriteFile;
 
 public abstract class Algorithm
 {
@@ -21,6 +22,9 @@ public abstract class Algorithm
     // but instead squares the epsilon parameter. Thus it is a lot faster.
     public final static int DISTANCE_METRIC = Calculations.DISTANCE_MANHATTAN;
 
+    private final String REACHABILITY_FILE = "reachability_log";
+	
+    
     /**
      * Ratio for determining if a point is a local maxima point.
      */
@@ -96,7 +100,7 @@ public abstract class Algorithm
      *
      * Input size / 100.
      */
-    public List<AlgorithmPoint> createNoise()
+    public List<AlgorithmPoint> createNoise(int n)
     {
         ArrayList<AlgorithmPoint> noise = new ArrayList<AlgorithmPoint>();
 
@@ -427,9 +431,14 @@ public abstract class Algorithm
      */
     public void printReachability()
     {
+    	WriteFile.getInstance().openFile(this.REACHABILITY_FILE);
+		
         for (AlgorithmPoint p : reachabilityPlot) {
             System.out.println(p.getCluster() + " " + p.getReachabilityDistance());
+            String data = p.getCluster()+";"+p.getReachabilityDistance();
+        	WriteFile.getInstance().write(data,this.REACHABILITY_FILE);
         }
+        
     }
 
     /**
