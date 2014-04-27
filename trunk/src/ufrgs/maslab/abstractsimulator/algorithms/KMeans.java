@@ -7,7 +7,8 @@ import ufrgs.maslab.abstractsimulator.algorithms.model.Point;
 
 public class KMeans extends Algorithm {
 
-	int clusters = 4;
+	int clusters = 2;
+	int maxClusters = 0;
 	
 	double lastDistance = 0; 
 	
@@ -18,33 +19,30 @@ public class KMeans extends Algorithm {
 	
 	@Override
 	public void run() {
-		
-		this.initializeCentroids();
-		int i = 0;
-		while(i != 10){
-			this.clusterInstances();
-			this.updateCluster();
-			/*
-			for(Point p : this.centroids)
-			{
-				System.out.println(p.getAttributes().toString());
-			}*/
-			i++;
-			System.out.println();
-		}
-		System.out.println("4 Clusters: "+Calculations.dbIndex(this.cluster));
-		/*
-		for(Point p : this.field.getAllPoints())
+		this.maxClusters = (int) Math.sqrt(this.field.getAllPoints().size());
+		for(int k = this.clusters; k < this.maxClusters; k++)
 		{
-			System.out.println("cluster "+p.getCluster());
-			System.out.println("points "+p.getAttributes().toString());
-		}*/
+			this.centroids.clear();
+			this.cluster.clear();
+			this.initializeCentroids(k);
+			int i = 0;
+			while(i != 500){
+				this.clusterInstances();
+				this.updateCluster();
+				i++;
+			}
+			for(Point c : this.cluster.keySet())
+			{
+				System.out.println(c.getAttributes().toString());
+			}
+			System.out.println(k+" clusters index: "+Calculations.dbIndex(this.cluster));
 		
+		}
 		
 	}
 	
-	private void initializeCentroids(){
-		for(int k = 0; k < this.clusters; k++)
+	private void initializeCentroids(int cl){
+		for(int k = 0; k < cl; k++)
 		{
 			Point p = this.field.getRandomPoint();
 			if(!this.cluster.keySet().contains(p))
@@ -77,7 +75,6 @@ public class KMeans extends Algorithm {
 	}
 	
 	private void updateCluster(){
-		ArrayList<Point> k = new ArrayList<Point>();
 		for(Point p : this.cluster.keySet())
 		{
 			for(ArrayList<Double> i : this.cluster.get(p))
