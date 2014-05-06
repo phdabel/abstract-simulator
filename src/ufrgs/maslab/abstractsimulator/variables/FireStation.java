@@ -101,6 +101,8 @@ public class FireStation extends Agent implements Building{
 			kmeans.setField(this.field);
 			if(this.getTime() == 2)
 				kmeans.run();
+			
+			show2DMap(this.gsom.getNeuralNetwork());
 			/*
 			//set the field in the algorithm
 			algo.setField(this.field);
@@ -294,8 +296,8 @@ public class FireStation extends Agent implements Building{
 		//learning.getNeuralNetwork().buildSkeleton();
 		
         learning.getNeuralNetwork().creatingLabels(this.templateFireTask);
-        //show2DMap(learning.getNeuralNetwork());
-		show3DMap(learning.getNeuralNetwork());
+        
+		//show3DMap(learning.getNeuralNetwork());
 		
 		
 		return learning;
