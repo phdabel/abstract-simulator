@@ -12,7 +12,10 @@ public class KMeans extends Algorithm {
 	
 	double lastDistance = 0; 
 	
+	//centroid points
 	ArrayList<Point> centroids = new ArrayList<Point>();
+	
+	//centroid points with
 	HashMap<Point, ArrayList<ArrayList<Double>>> cluster = new HashMap<Point, ArrayList<ArrayList<Double>>>();
 	
 	
@@ -41,6 +44,11 @@ public class KMeans extends Algorithm {
 		
 	}
 	
+	/**
+	 * initialize centroids for k-means algorithm
+	 * 
+	 * @param cl <code>int<code> number of centroids for k-means
+	 */
 	private void initializeCentroids(int cl){
 		for(int k = 0; k < cl; k++)
 		{
