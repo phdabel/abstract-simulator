@@ -15,7 +15,6 @@ import org.neuroph.core.data.DataSetRow;
 
 import ufrgs.maslab.abstractsimulator.algorithms.Algorithm;
 import ufrgs.maslab.abstractsimulator.algorithms.KMeans;
-import ufrgs.maslab.abstractsimulator.algorithms.Optics;
 import ufrgs.maslab.abstractsimulator.algorithms.model.Field;
 import ufrgs.maslab.abstractsimulator.algorithms.model.Point;
 import ufrgs.maslab.abstractsimulator.constants.MessageType;
@@ -91,18 +90,24 @@ public class FireStation extends Agent implements Building{
 	        
 			
 			//insert neurons attributes into field
-			for(Position p : this.gsom.getNeuralNetwork().getStructure().keySet())
-			{
-	
-				Neuron n  = this.gsom.getNeuralNetwork().getStructure().get(p);
-				this.neuronToPoint(p, n, time);
-			}
-			
-			kmeans.setField(this.field);
-			if(this.getTime() == 2)
+	        if(time == 2){
+				for(Position p : this.gsom.getNeuralNetwork().getStructure().keySet())
+				{
+					Neuron n  = this.gsom.getNeuralNetwork().getStructure().get(p);
+					this.neuronToPoint(n, time);
+				}
+				kmeans.setField(this.field);
 				kmeans.run();
+				
+				/*for(Neuron n : this.gsom.getNeuralNetwork().getStructure().values())
+				{
+					System.out.println(n.cluster+" - "+n);
+				}*/
+
+				show2DMap(this.gsom.getNeuralNetwork());
+				//show3DMap(this.gsom.getNeuralNetwork());
+	        }
 			
-			show2DMap(this.gsom.getNeuralNetwork());
 			/*
 			//set the field in the algorithm
 			algo.setField(this.field);
@@ -139,7 +144,7 @@ public class FireStation extends Agent implements Building{
 	
 	private Field field = new Field();
 	
-	Algorithm optics = new Optics();
+	//Algorithm optics = new Optics();
 	
 	Algorithm kmeans = new KMeans();
 	
@@ -179,7 +184,7 @@ public class FireStation extends Agent implements Building{
 	 * @param p
 	 * @param n
 	 */
-	public void neuronToPoint(Position p, Neuron n, int time)
+	public void neuronToPoint(Neuron n, int time)
 	{
 		ArrayList<Double> attributes = new ArrayList<Double>();
 		String data = time+";";
@@ -190,8 +195,8 @@ public class FireStation extends Agent implements Building{
 		}
 
 		WriteFile.getInstance().write(data,this.FILELOG);
-		Point point = new Point(p.getAxisPosition().get(0), p.getAxisPosition().get(1), 0, attributes);
-		this.field.addPoint(point);		
+		//Point point = new Point(p.getAxisPosition().get(0), p.getAxisPosition().get(1), 0, attributes);
+		this.field.addPoint(n);		
 
 	}
 	

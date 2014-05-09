@@ -102,8 +102,9 @@ public abstract class Algorithm
      */
     public List<AlgorithmPoint> createNoise(int n)
     {
+    	
         ArrayList<AlgorithmPoint> noise = new ArrayList<AlgorithmPoint>();
-
+        /*
         Random rand = new Random();
 
         int num = field.size() / 75;
@@ -126,7 +127,7 @@ public abstract class Algorithm
                 } while (field.hasPoint(x, y));
                 noise.add(new AlgorithmPoint(new Point(x, y, 0)));
             }
-        }
+        }*/
 
         return noise;
     }

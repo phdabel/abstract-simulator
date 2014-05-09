@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import ufrgs.maslab.abstractsimulator.algorithms.model.Point;
+import ufrgs.maslab.gsom.neuron.Neuron;
 
 
 /**
@@ -112,7 +113,7 @@ public class Calculations
      * @param cluster
      * @return
      */
-    public static Double dbIndex(HashMap<Point, ArrayList<ArrayList<Double>>> cluster)
+    public static Double dbIndex(HashMap<Point, ArrayList<Neuron>> cluster)
     {
     	if(cluster.size() == 1)
     		return 0d;
@@ -142,12 +143,17 @@ public class Calculations
      * @param instances
      * @return
      */
-    public static Double intraClusterVariance(Point c, ArrayList<ArrayList<Double>> instances)
+    public static Double intraClusterVariance(Point c, ArrayList<Neuron> instances)
     {
     	Double var = 0d;
-    	for(ArrayList<Double> i : instances)
+    	for(Neuron i : instances)
     	{
-    		var += Math.pow(distance(i, c.getAttributes(), 2),2);
+    		ArrayList<Double> weights = new ArrayList<Double>();
+    		for(double d : i.getWeights())
+    		{
+    			weights.add(d);
+    		}
+    		var += Math.pow(distance(weights, c.getAttributes(), 2),2);
     	}
     	return (var / instances.size());    	
     }

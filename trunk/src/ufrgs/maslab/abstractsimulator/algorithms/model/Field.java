@@ -2,6 +2,9 @@ package ufrgs.maslab.abstractsimulator.algorithms.model;
 
 import java.util.*;
 
+import ufrgs.maslab.gsom.neuron.Neuron;
+import ufrgs.maslab.gsom.util.Position;
+
 public class Field
 {
 
@@ -11,7 +14,11 @@ public class Field
     int min_y;
     int max_y;
 
-    public TreeMap<Long,Point> points;
+    int min_z;
+    int max_z;
+    
+    public TreeMap<Position, Neuron> points;
+    //public TreeMap<Long,Point> points;
 
     public Field()
     {
@@ -19,18 +26,30 @@ public class Field
         max_x = 0;
         min_y = Integer.MAX_VALUE;
         max_y = 0;
-        points = new TreeMap<Long,Point>();
+        min_z = Integer.MAX_VALUE;
+        max_z = 0;
+        points = new TreeMap<Position, Neuron>();
+        //points = new TreeMap<Long,Point>();
     }
     
-    public Point getRandomPoint(){
+    public Neuron getRandomPoint(){
     	Random random = new Random();
+    	List<Position> keys = new ArrayList<Position>(this.points.keySet());
+    	
+    	Position randomKey = keys.get(random.nextInt(keys.size()));
+    	//System.out.println("position "+randomKey.getAxisPosition());
+    	return this.points.get(randomKey);
+    }
+    /*public Point getRandomPoint(){
+    	Random random = new Random();
+    	
     	List<Long> keys = new ArrayList<Long>(this.points.keySet());
     	Long randomKey = keys.get(random.nextInt(keys.size()));
     	
     	return this.points.get(randomKey);
-    }
+    }*/
 
-    public void addPoint(Point p)
+    /*public void addPoint(Point p)
     {
 	        if (hasPoint(p.getX(), p.getY())) {
 	            return;
@@ -49,8 +68,47 @@ public class Field
 	        }
 	        if (p.getY() > max_y) {
 	            max_y = p.getY();
-	        }
+	        }	
+    }*/
+    public void addPoint(Neuron n)
+    {
+    	if(hasPoint(n.getPosition()))
+    		return;
+    	this.points.put(n.getPosition(), n);
+    	if(n.getPosition().getDimension() > 2)
+    	{
+    		if(n.getPosition().getAxisPosition().get(2) < min_z)
+    		{
+    			min_z = n.getPosition().getAxisPosition().get(2);
+    		}
+    		
+    		if(n.getPosition().getAxisPosition().get(2) > max_z)
+    		{
+    			max_z = n.getPosition().getAxisPosition().get(2);
+    		}
+    			
+    	}
     	
+    	if(n.getPosition().getAxisPosition().get(0) < min_x)
+		{
+			min_x = n.getPosition().getAxisPosition().get(0);
+		}
+		
+		if(n.getPosition().getAxisPosition().get(0) > max_x)
+		{
+			max_x = n.getPosition().getAxisPosition().get(0);
+		}
+		
+		if(n.getPosition().getAxisPosition().get(1) < min_y)
+		{
+			min_y = n.getPosition().getAxisPosition().get(1);
+		}
+		
+		if(n.getPosition().getAxisPosition().get(1) > max_y)
+		{
+			max_y = n.getPosition().getAxisPosition().get(1);
+		}
+		
     }
 
     public int size()
@@ -58,6 +116,17 @@ public class Field
         return points.size();
     }
 
+    public Collection<Neuron> getAllPoints()
+    {
+    	return points.values();
+    }
+    
+    public TreeMap<Position, Neuron> getPointsMap()
+    {
+    	return points;
+    }
+    
+    /*
     public Collection<Point> getAllPoints()
     {
         return points.values();
@@ -66,13 +135,23 @@ public class Field
     public TreeMap<Long,Point> getPointsMap()
     {
         return points;
-    }
+    }*/
 
+    public Neuron getPoints(Position p)
+    {
+    	return points.get(p);
+    }
+    /*
     public Point getPoint(int x, int y)
     {
         return points.get(getKey(x, y));
-    }
+    }*/
 
+    public boolean hasPoint(Position p)
+    {
+    	return points.containsKey(p);
+    }
+    /*
     public boolean hasPoint(int x, int y)
     {
         return points.containsKey(getKey(x, y));
@@ -84,7 +163,7 @@ public class Field
         key = key << 32;
         key += y;
         return key;
-    }
+    }*/
 
     /**
      * Get the width of the field.
