@@ -1,6 +1,7 @@
 package ufrgs.maslab.abstractsimulator.algorithms;
 
 import ufrgs.maslab.abstractsimulator.algorithms.model.Point;
+import ufrgs.maslab.gsom.neuron.Neuron;
 
 
 /**
@@ -30,7 +31,7 @@ public class AllNoise extends Algorithm
 
     public void run()
     {
-        for (Point p : field.getAllPoints()) {
+        for (Neuron p : field.getAllPoints()) {
             p.setCluster(0);
         }
     }
