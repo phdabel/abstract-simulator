@@ -1,5 +1,6 @@
 package ufrgs.maslab.abstractsimulator.variables;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -105,6 +106,45 @@ public class FireStation extends Agent implements Building{
 				}*/
 
 				show2DMap(this.gsom.getNeuralNetwork());
+				for(int p = 0; p < ((KMeans)this.kmeans).bestCentroids.size(); p++)
+				{
+					switch(p)
+	            	{
+	            		case 0:
+	            			System.out.println("Centroid Black");
+	            			break;
+	            		case 1:
+	            			System.out.println("Centroid Green");
+	            			break;
+	            		case 2:
+	            			System.out.println("Centroid Blue");
+	            			break;
+	            		case 3:
+	            			System.out.println("Centroid Red");
+	            			break;
+	            		case 4:
+	            			System.out.println("Centroid Yellow");
+	            			break;
+	            		case 5:
+	            			System.out.println("Centroid Gray");
+	            			break;
+	            		case 6:
+	            			System.out.println("Centroid White");
+	            			break;
+	            		case 7:
+	            			System.out.println("Centroid Magenta");
+	            			break;
+	            		default:
+	            			System.out.println("Centroid Cyan");
+	            			break;
+	            			
+	            	}
+					for(int k = 0; k < this.templateFireTask.getMaxInput().length; k++)
+					{
+						System.out.println(this.templateFireTask.getAttributes()[k]+" --> "+(this.templateFireTask.getMaxInput()[k]*((KMeans)this.kmeans).bestCentroids.get(p).getAttributes().get(k)));
+					}
+					System.out.println();
+				}
 				//show3DMap(this.gsom.getNeuralNetwork());
 	        }
 			
@@ -268,7 +308,7 @@ public class FireStation extends Agent implements Building{
 		 * monta um conjunto de treino
 		 * com tarefas aleatorias
 		 */
-        for(int k = 0; k < 50; k++)
+        for(int k = 0; k < 100; k++)
 		{
 			DataSetRow d = new DataSetRow(FireBuildingTask.randomTask(), new double[]{0});
 			training.addRow(d);
