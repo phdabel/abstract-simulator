@@ -18,12 +18,12 @@ public class KMeans extends Algorithm {
 	double lastDistance = 0; 
 	
 	//centroid points
-	//ArrayList<Position> centroids = new ArrayList<Position>();
 	ArrayList<Point> centroids = new ArrayList<Point>();
 	
 	//centroid points with
 	HashMap<Point, ArrayList<Neuron>> cluster = new HashMap<Point, ArrayList<Neuron>>();
-	//HashMap<Point, ArrayList<ArrayList<Double>>> cluster = new HashMap<Point, ArrayList<ArrayList<Double>>>();
+	
+	public ArrayList<Point> bestCentroids = new ArrayList<Point>();
 	
 	
 	
@@ -49,10 +49,12 @@ public class KMeans extends Algorithm {
 			System.out.println(k+" clusters index: "+clusterMeasure);
 			if(clusterMeasure < this.betterCluster)
 			{
+				this.bestCentroids.clear();
 				this.betterCluster = clusterMeasure;
 				int ktmp = 0;
 				for(Point ptmp : this.cluster.keySet())
 				{
+					this.bestCentroids.add(ptmp);
 					for(Neuron n : this.cluster.get(ptmp)){
 						n.setCluster(ktmp);
 					}
