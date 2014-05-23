@@ -12,9 +12,9 @@ public abstract class Value extends Entity implements Comparable<Value> {
 	 */
 	private static final long serialVersionUID = -5767460036572644735L;
 	
-	private Double x;
+	private int x;
 	
-	private Double y;
+	private int y;
 	
 	private ArrayList<Class<Human>> performer = new ArrayList<Class<Human>>();
 	
@@ -41,19 +41,19 @@ public abstract class Value extends Entity implements Comparable<Value> {
 		super();
 	}
 
-	public Double getX() {
+	public Integer getX() {
 		return x;
 	}
 
-	public void setX(Double x) {
+	public void setX(Integer x) {
 		this.x = x;
 	}
 
-	public Double getY() {
+	public Integer getY() {
 		return y;
 	}
 
-	public void setY(Double y) {
+	public void setY(Integer y) {
 		this.y = y;
 	}
 	

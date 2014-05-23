@@ -1,7 +1,10 @@
 package ufrgs.maslab.abstractsimulator.util;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -35,6 +38,19 @@ public class WriteFile {
 			instance = new WriteFile();
 		}
 		return instance;
+	}
+	
+	public BufferedReader readFile(String filename)
+	{
+		BufferedReader br = null;
+		try{
+			br = new BufferedReader(new  FileReader(System.getProperty("user.dir")+"/log/"+filename.toString()+".csv"));
+			return br;
+		}catch(FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	

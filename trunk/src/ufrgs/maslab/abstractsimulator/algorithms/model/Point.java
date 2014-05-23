@@ -2,59 +2,60 @@ package ufrgs.maslab.abstractsimulator.algorithms.model;
 
 import java.util.ArrayList;
 
-
 public class Point
 {
-	
-    int x;
-    int y;
-    Integer z = null;
-    int c; // cluster number
+	private int id;
+    private double x;
+    private double y;
+    private Double z = null;
+    private Centroid cluster; // cluster number
     private ArrayList<Double> attributes = new ArrayList<Double>();
 
-    public Point(int x, int y, int c, ArrayList<Double> attributes)
+    public Point(int id, double x, double y, Centroid cluster, ArrayList<Double> attributes)
     {
+    	this.id = id;
     	this.setAttributes(attributes);
     	this.x = x;
     	this.y = y;
-    	this.c = c;
+    	this.cluster = cluster;
     }
     
-    public void setZ(int z)
+    public void setZ(double z)
     {
     	this.z = z;
     }
     
-    public Point(int x, int y, int c)
+    public Point(int id, double x, double y, Centroid c)
     {
+    	this.id = id;
         this.x = x;
         this.y = y;
-        this.c = c;
+        this.cluster = c;
     }
 
-	public int getX()
+	public double getX()
     {
-        return x;
+        return this.x;
     }
 
-    public int getY()
+    public double getY()
     {
-        return y;
+        return this.y;
     }
     
-    public int getZ()
+    public double getZ()
     {
-    	return z;
+    	return this.z;
     }
 
-    public int getCluster()
+    public Centroid getCluster()
     {
-        return c;
+        return this.cluster;
     }
 
-    public void setCluster(int c)
+    public void setCluster(Centroid c)
     {
-        this.c = c;
+        this.cluster = c;
     }
 
 	public ArrayList<Double> getAttributes() {
@@ -67,11 +68,14 @@ public class Point
 	
 	public int hashCode()
 	{
-		int key = x;
-        key = key << 32;
-        key += y;
-        if(z != null)
-        	key += z;
-        return key;
+        return this.getId();
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }

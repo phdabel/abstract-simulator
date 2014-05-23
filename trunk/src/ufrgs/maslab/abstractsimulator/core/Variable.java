@@ -3,8 +3,12 @@ package ufrgs.maslab.abstractsimulator.core;
 import java.util.ArrayList;
 //import java.util.HashMap;
 
+
+import java.util.Random;
+
 import ufrgs.maslab.abstractsimulator.mailbox.MailBox;
 import ufrgs.maslab.abstractsimulator.mailbox.message.Message;
+import ufrgs.maslab.abstractsimulator.util.Transmitter;
 import ufrgs.maslab.abstractsimulator.values.Task;
 
 public abstract class Variable extends Entity {
@@ -45,9 +49,9 @@ public abstract class Variable extends Entity {
 	//private HashMap<Integer,Class<? extends Entity>> domain = new HashMap<Integer,Class<? extends Entity>>();
 	private ArrayList<Entity> domain = new ArrayList<Entity>();
 	
-	private double x;
+	private Integer x;
 	
-	private double y;
+	private Integer y;
 	
 	private MailBox mail = new MailBox();
 	
@@ -57,8 +61,9 @@ public abstract class Variable extends Entity {
 
 	public Variable() {
 		super();
-		this.setX(this.rollDices());
-		this.setY(this.rollDices());
+		Random r = new Random();
+		this.setX(r.nextInt(Transmitter.getIntConfigParameter("config.properties", "maximum.xpos")));
+		this.setY(r.nextInt(Transmitter.getIntConfigParameter("config.properties", "maximum.ypos")));
 	}
 
 	/**
@@ -173,20 +178,20 @@ public abstract class Variable extends Entity {
 	}
 
 	
-	public double getX(){
+	public Integer getX(){
 		return this.x;
 	}
 	
-	public double getY(){
+	public Integer getY(){
 		return this.y;
 	}
 	
-	public void setY(double y)
+	public void setY(Integer y)
 	{
 		this.y = y;
 	}
 	
-	public void setX(double x){
+	public void setX(Integer x){
 		this.x = x;
 	}
 
