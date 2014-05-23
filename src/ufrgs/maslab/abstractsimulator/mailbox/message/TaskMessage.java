@@ -12,9 +12,9 @@ public class TaskMessage extends Message {
 
 	private Integer taskId;
 	
-	private Double taskX;
+	private Integer taskX;
 	
-	private Double taskY;
+	private Integer taskY;
 	
 	private Double taskValue;
 	
@@ -35,19 +35,19 @@ public class TaskMessage extends Message {
 		this.taskId = taskId;
 	}
 
-	public Double getTaskX() {
+	public Integer getTaskX() {
 		return taskX;
 	}
 
-	public void setTaskX(Double taskX) {
+	public void setTaskX(Integer taskX) {
 		this.taskX = taskX;
 	}
 
-	public Double getTaskY() {
+	public Integer getTaskY() {
 		return taskY;
 	}
 
-	public void setTaskY(Double taskY) {
+	public void setTaskY(Integer taskY) {
 		this.taskY = taskY;
 	}
 

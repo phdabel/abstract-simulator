@@ -1,29 +1,26 @@
 package ufrgs.maslab.abstractsimulator.algorithms;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
+import ufrgs.maslab.abstractsimulator.algorithms.model.Centroid;
 import ufrgs.maslab.abstractsimulator.algorithms.model.Point;
-import ufrgs.maslab.gsom.neuron.Neuron;
-import ufrgs.maslab.gsom.util.Position;
 
 public class KMeans extends Algorithm {
 
 	int clusters = 2;
 	int maxClusters = 0;
 	Double betterCluster = Double.MAX_VALUE;
-	double lastDistance = 0; 
+	double lastDistance = 0;
+	public ArrayList<Double> weight = new ArrayList<Double>();
 	
 	//centroid points
-	ArrayList<Point> centroids = new ArrayList<Point>();
+	ArrayList<Centroid> centroids = new ArrayList<Centroid>();
 	
 	//centroid points with
-	HashMap<Point, ArrayList<Neuron>> cluster = new HashMap<Point, ArrayList<Neuron>>();
+	HashMap<Centroid, ArrayList<Point>> cluster = new HashMap<Centroid, ArrayList<Point>>();
 	
-	public ArrayList<Point> bestCentroids = new ArrayList<Point>();
+	public ArrayList<Centroid> bestCentroids = new ArrayList<Centroid>();
 	
 	
 	
@@ -36,12 +33,12 @@ public class KMeans extends Algorithm {
 			this.cluster.clear();
 			this.initializeCentroids(k);
 			int i = 0;
-			while(i != 500){
+			while(i != 100){
 				this.clusterInstances();
 				this.updateCluster();
 				i++;
 			}
-			for(Point c : this.cluster.keySet())
+			for(Centroid c : this.cluster.keySet())
 			{
 				System.out.println(c.getAttributes().toString());
 			}
@@ -51,14 +48,12 @@ public class KMeans extends Algorithm {
 			{
 				this.bestCentroids.clear();
 				this.betterCluster = clusterMeasure;
-				int ktmp = 0;
-				for(Point ptmp : this.cluster.keySet())
+				for(Centroid ptmp : this.cluster.keySet())
 				{
 					this.bestCentroids.add(ptmp);
-					for(Neuron n : this.cluster.get(ptmp)){
-						n.setCluster(ktmp);
+					for(Point n : this.cluster.get(ptmp)){
+						n.setCluster(ptmp);
 					}
-					ktmp++;
 				}
 			}
 		
@@ -74,23 +69,29 @@ public class KMeans extends Algorithm {
 	private void initializeCentroids(int cl){
 		for(int k = 0; k < cl; k++)
 		{
-			Neuron n = null;
+			Centroid n = null;
 			while(n == null)
-				n = this.field.getRandomPoint();
-			//Point p = this.field.getRandomPoint();
-			//System.out.println("k "+k+" keyset size "+this.cluster.keySet().size()+" neuron "+n);
-			Point p = new Point(n.getPosition().getAxisPosition().get(0), n.getPosition().getAxisPosition().get(1),0);
-			if(n.getPosition().getDimension() > 2)
-				p.setZ(n.getPosition().getAxisPosition().get(2));
-			if(!this.cluster.keySet().contains(p))
 			{
-				ArrayList<Neuron> instances = new ArrayList<Neuron>();
-				instances.add(n);
-				Point c = new Point(n.getPosition().getAxisPosition().get(0), n.getPosition().getAxisPosition().get(1),0);
-				ArrayList<Double> cWeights = new ArrayList<Double>(Collections.nCopies(n.getWeights().length, 0.0));
-				c.setAttributes(cWeights);
-				this.cluster.put(c, instances);
-				this.centroids.add(c);
+				Point p = this.field.getRandomPoint();
+				n = new Centroid();
+				n.setId(k);
+				n.setAttributes(p.getAttributes());
+				n.setX(p.getX());
+				n.setY(n.getY());
+			}
+			
+			//Point p = new Point(n, n.getPosition().getAxisPosition().get(1),0);
+			//if(n.getPosition().getDimension() > 2)
+			//	p.setZ(n.getPosition().getAxisPosition().get(2));
+			if(!this.cluster.keySet().contains(n))
+			{
+				ArrayList<Point> instances = new ArrayList<Point>();
+				//instances.add(n);
+				//Point c = new Point(n.getPosition().getAxisPosition().get(0), n.getPosition().getAxisPosition().get(1),0);
+				//ArrayList<Double> cWeights = new ArrayList<Double>(Collections.nCopies(n.getWeights().length, 0.0));
+				//c.setAttributes(cWeights);
+				this.cluster.put(n, instances);
+				this.centroids.add(n);
 			}
 			/*if(!this.cluster.keySet().contains(p))
 			{
@@ -103,62 +104,50 @@ public class KMeans extends Algorithm {
 	}
 	
 	private void clusterInstances(){
-		for(Neuron n : this.field.getAllPoints())
+		for(Point n : this.field.getAllPoints())
 		{
 			ArrayList<Double> weights = new ArrayList<Double>();
-			for(double d : n.getWeights())
+			for(double d : n.getAttributes())
 			{
 				weights.add(d);
 			}
 			double minDist = Double.MAX_VALUE;
-			Point bestP = null;
-			for(Point c : this.cluster.keySet())
+			Centroid bestP = null;
+			for(Centroid c : this.cluster.keySet())
 			{
-				if(Calculations.distance(weights, c.getAttributes(), 2) < minDist)
-				{
-					minDist = Calculations.distance(weights, c.getAttributes(), 2);
-					bestP = c;
+				if(weight.isEmpty()){
+					if(Calculations.distance(weights, c.getAttributes(), 2) < minDist)
+					{
+						minDist = Calculations.distance(weights, c.getAttributes(), 2);
+						bestP = c;
+					}
+				}else{
+					if(Calculations.distance(weights, c.getAttributes(), 3, this.weight) < minDist)
+					{
+						minDist = Calculations.distance(weights, c.getAttributes(), 3, this.weight);
+						bestP = c;
+					}
 				}
 			}
 			this.cluster.get(bestP).add(n);
 			
 		}
-		/*for(Point p : this.field.getAllPoints())
-		{
-			double minDist = Double.MAX_VALUE;
-			Point bestP = null;
-			for(Point c : this.cluster.keySet())
-			{
-				if(Calculations.distance(p, c, 2) < minDist)
-				{
-					minDist = Calculations.distance(p, c, 2);
-					bestP = c;
-				}
-			}
-			this.cluster.get(bestP).add(p.getAttributes());
-			p.setCluster(this.centroids.indexOf(bestP));
-		}*/
 			
 	}
 	
 	private void updateCluster(){
-		for(Point p : this.cluster.keySet())
+		for(Centroid p : this.cluster.keySet())
 		{
-			for(Neuron i : this.cluster.get(p))
+			for(Point i : this.cluster.get(p))
 			{ 
 				ArrayList<Double> weights = new ArrayList<Double>();
-				for(double d : i.getWeights())
+				for(double d : i.getAttributes())
 				{
 					weights.add(d);
 				}
 				p.setAttributes(Calculations.addArray(weights, p.getAttributes()));
 			}
 			p.setAttributes(Calculations.divideArray(p.getAttributes(), this.cluster.get(p).size()));
-			/*for(ArrayList<Double> i : this.cluster.get(p))
-			{
-				p.setAttributes(Calculations.addArray(i, p.getAttributes()));
-			}
-			p.setAttributes(Calculations.divideArray(p.getAttributes(), this.cluster.get(p).size()));*/
 		}
 	}
 

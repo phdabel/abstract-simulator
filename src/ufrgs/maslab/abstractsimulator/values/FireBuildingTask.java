@@ -102,8 +102,10 @@ public class FireBuildingTask extends Task {
 			this.setFloors(1+this.rollDices(Transmitter.getIntConfigParameter(this.configFileName, "maximum.floors")));
 			this.setGroundArea(50 + this.rollDices(Transmitter.getIntConfigParameter(this.configFileName, "maximum.groundArea")));
 		}
-		this.setY(this.rollDices(/*Transmitter.getIntConfigParameter(this.configFileName, "maximum.xpos")*/));
-		this.setX(this.rollDices(/*Transmitter.getIntConfigParameter(this.configFileName, "maximum.ypos")*/));
+		Random r = new Random();
+		
+		this.setX(r.nextInt(Transmitter.getIntConfigParameter("config.properties", "maximum.xpos")));		
+		this.setY(r.nextInt(Transmitter.getIntConfigParameter("config.properties", "maximum.ypos")));
 		this.configureTask();
 	}
 	
@@ -229,8 +231,8 @@ public class FireBuildingTask extends Task {
 		int groundArea = 0;
 		double success = 0;
 		
-		double x = r.nextDouble();
-		double y = r.nextDouble();
+		double x = r.nextInt(Transmitter.getIntConfigParameter("config.properties", "maximum.xpos"));
+		double y = r.nextInt(Transmitter.getIntConfigParameter("config.properties", "maximum.ypos"));
 		int matter = Matter.randomMatter().getValue();
 		int temperature = Temperature.randomTemperature().getValue();
 		if(matter == Matter.WOODEN_HOUSE.getValue())

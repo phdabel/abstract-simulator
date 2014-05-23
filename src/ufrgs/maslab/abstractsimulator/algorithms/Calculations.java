@@ -3,8 +3,8 @@ package ufrgs.maslab.abstractsimulator.algorithms;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import ufrgs.maslab.abstractsimulator.algorithms.model.Centroid;
 import ufrgs.maslab.abstractsimulator.algorithms.model.Point;
-import ufrgs.maslab.gsom.neuron.Neuron;
 
 
 /**
@@ -13,6 +13,7 @@ import ufrgs.maslab.gsom.neuron.Neuron;
 public class Calculations
 {
 
+	public final static int WEIGHTED_DISTANCE = 3;
     public final static int DISTANCE_EUCLIDIAN = 2;
     public final static int DISTANCE_MANHATTAN = 1;
     public final static int DISTANCE_EUCLIDIAN_SQ = -1;
@@ -41,6 +42,23 @@ public class Calculations
     double densityDistance(int minPoints, Point sourcePoint, Point endPoint,int m)
     {
         return(Math.max(distance(sourcePoint,minDistancePoint(sourcePoint,minPoints),m),distance(sourcePoint,endPoint,m)));
+    }
+    
+    public static double distance(ArrayList<Double> source, ArrayList<Double> dest, int m, ArrayList<Double> weights)
+    {
+    	double res = 0d;
+    	switch(m)
+    	{
+    		case WEIGHTED_DISTANCE:
+    			for(int k = 0; k < source.size(); k++)
+    			{
+    				res += weights.get(k) * Math.pow((source.get(k) - dest.get(k)),2);
+    			}
+    			break;
+    		default:
+    			return distance(source, dest, m);
+    	}
+    	return Math.pow(res,2);
     }
     
     public static double distance(ArrayList<Double> source, ArrayList<Double> dest, int m)
@@ -86,6 +104,11 @@ public class Calculations
     	return distance(sourcePoint.getAttributes(), destPoint.getAttributes(), m);
     }
     
+    public static double distance(Centroid centroidSource, Centroid centroidDest, int m)
+    {
+    	return distance(centroidSource.getAttributes(), centroidDest.getAttributes(), m);
+    }
+    
     public static ArrayList<Double> addArray(ArrayList<Double> array1, ArrayList<Double> array2)
     {
     	ArrayList<Double> result = new ArrayList<Double>();
@@ -113,12 +136,12 @@ public class Calculations
      * @param cluster
      * @return
      */
-    public static Double dbIndex(HashMap<Point, ArrayList<Neuron>> cluster)
+    public static Double dbIndex(HashMap<Centroid, ArrayList<Point>> cluster)
     {
     	if(cluster.size() == 1)
     		return 0d;
     	
-    	ArrayList<Point> c = new ArrayList<Point>(cluster.keySet());
+    	ArrayList<Centroid> c = new ArrayList<Centroid>(cluster.keySet());
     	Double sum = 0d;
     	Double maxValue = 0d;
     	for(int i = 0; i < c.size(); i++)
@@ -143,13 +166,13 @@ public class Calculations
      * @param instances
      * @return
      */
-    public static Double intraClusterVariance(Point c, ArrayList<Neuron> instances)
+    public static Double intraClusterVariance(Centroid c, ArrayList<Point> instances)
     {
     	Double var = 0d;
-    	for(Neuron i : instances)
+    	for(Point i : instances)
     	{
     		ArrayList<Double> weights = new ArrayList<Double>();
-    		for(double d : i.getWeights())
+    		for(double d : i.getAttributes())
     		{
     			weights.add(d);
     		}

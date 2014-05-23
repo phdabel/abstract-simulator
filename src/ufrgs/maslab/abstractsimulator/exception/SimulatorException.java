@@ -1,6 +1,6 @@
 package ufrgs.maslab.abstractsimulator.exception;
 
-public class SimulatorException extends Exception {
+public class SimulatorException extends RuntimeException {
 
 	/**
 	 * 

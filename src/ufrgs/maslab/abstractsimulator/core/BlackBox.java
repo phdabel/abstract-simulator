@@ -191,6 +191,7 @@ public class BlackBox {
 			if(this.getSimulation().get(0) instanceof PerceptionSimulator)
 				this.getSimulation().get(0).simulate(var, this.getEnvironment());
 			
+			
 			//update age of the agent
 			var.setTime(this.time);
 			//runs the act command for each agent

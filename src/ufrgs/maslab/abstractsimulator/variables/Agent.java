@@ -1,10 +1,12 @@
 package ufrgs.maslab.abstractsimulator.variables;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import ufrgs.maslab.abstractsimulator.core.Variable;
 import ufrgs.maslab.abstractsimulator.log.AgentLogger;
 import ufrgs.maslab.abstractsimulator.mailbox.message.Message;
+import ufrgs.maslab.abstractsimulator.util.Transmitter;
 
 public class Agent extends Variable {
 
@@ -24,11 +26,12 @@ public class Agent extends Variable {
 	public Agent(Integer id)
 	{
 		super(id);
-		this.setX(this.rollDices());
-		this.setY(this.rollDices());
+		Random r = new Random();
+		this.setX(r.nextInt(Transmitter.getIntConfigParameter("config.properties", "maximum.xpos")));
+		this.setY(r.nextInt(Transmitter.getIntConfigParameter("config.properties", "maximum.ypos")));
 	}
 	
-	public Agent(double x, double y){
+	public Agent(Integer x, Integer y){
 		super();
 		this.setY(y);
 		this.setX(x);

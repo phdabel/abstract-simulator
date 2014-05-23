@@ -43,17 +43,17 @@ public class PerceptionSimulator extends DefaultSimulation {
 	private void sense(Variable var, Environment<Entity> env) throws SimulatorException{
 		
 			ArrayList<Double> e1 = new ArrayList<Double>(
-				    Arrays.asList(var.getX(), var.getY()));
+				    Arrays.asList(var.getX().doubleValue(), var.getY().doubleValue()));
 			
 			ArrayList<Entity> domain = new ArrayList<Entity>();
 			//HashMap<Integer, Class<? extends Entity>> domain = new HashMap<Integer, Class<? extends Entity>>();
-			Double radius = Transmitter.getDoubleConfigParameter(this.configFile, "agent.radius");
+			Integer radius = Transmitter.getIntConfigParameter(this.configFile, "agent.radius");
 			for(Value val : env.getValues())
 			{
 				ArrayList<Double> e2 = new ArrayList<Double>(
-					    Arrays.asList(val.getX(), val.getY()));
+					    Arrays.asList(val.getX().doubleValue(), val.getY().doubleValue()));
 				
-				if(Utilities.euclideanDistance(e1, e2) <= radius)
+				if(Utilities.euclideanDistance(e1, e2) <= radius.doubleValue())
 					domain.add(val);
 					//domain.put(val.getId(),val.getClass());
 				
