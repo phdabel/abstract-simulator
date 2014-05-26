@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jgrapht-0.8.3"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/java3D"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jmaxsum"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
