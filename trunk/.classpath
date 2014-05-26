@@ -2,8 +2,12 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jgrapht-0.8.3"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/java3D"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jmaxsum"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jgrapht-core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jgrapht-ext"/>
+	<classpathentry kind="lib" path="lib/jgraph-5.13.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/jgraphx-2.0.0.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jgrapht-demo"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

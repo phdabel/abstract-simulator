@@ -67,6 +67,11 @@ public class Agent extends Variable {
 		this.voice = voice;
 	}
 	
+	public String toString()
+	{
+		return "Agent_"+this.getId();
+	}
+	
 	
 
 }
