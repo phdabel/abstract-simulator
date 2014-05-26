@@ -32,7 +32,7 @@ public class Task extends Value  {
 	
 	public String toString()
 	{
-		return "Task_"+this.getId();
+		return ""+this.getId();
 	}
 	
 	

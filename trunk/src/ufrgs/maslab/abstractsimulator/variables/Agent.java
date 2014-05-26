@@ -69,7 +69,7 @@ public class Agent extends Variable {
 	
 	public String toString()
 	{
-		return "Agent_"+this.getId();
+		return ""+this.getId();
 	}
 	
 	
