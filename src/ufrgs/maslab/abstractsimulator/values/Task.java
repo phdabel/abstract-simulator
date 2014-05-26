@@ -30,6 +30,11 @@ public class Task extends Value  {
 		TaskLogger.saveHeader();
 	}
 	
+	public String toString()
+	{
+		return "Task_"+this.getId();
+	}
+	
 	
 	
 		
