@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import ufrgs.maslab.abstractsimulator.core.simulators.DefaultSimulation;
 import ufrgs.maslab.abstractsimulator.core.simulators.basic.CommunicationSimulation;
 import ufrgs.maslab.abstractsimulator.core.simulators.basic.PerceptionSimulator;
+import ufrgs.maslab.abstractsimulator.core.viewer.Viewer;
 import ufrgs.maslab.abstractsimulator.exception.SimulatorException;
 import ufrgs.maslab.abstractsimulator.util.Transmitter;
 import ufrgs.maslab.abstractsimulator.util.WriteFile;
@@ -205,9 +206,7 @@ public class BlackBox {
 		/**
 		 * perform the simulations except perception simulator
 		 */
-		if(this.time == 2){
-			//GraphSimViewer.main(env);
-		}
+		
 	}
 
 	/**
